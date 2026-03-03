@@ -1,0 +1,247 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* =========================
+   CART PAGE
+========================= */
+.cart-page {
+  min-height: 100vh;
+  padding: 90px 20px 40px;
+  background: linear-gradient(135deg, #43cea2, #185a9d);
+  animation: fadeIn 1s ease-in-out;
+  color: #fff;
+}
+
+/* =========================
+   CART TITLE
+========================= */
+.cart-page h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 32px;
+  animation: slideDown 0.8s ease;
+}
+
+/* Empty Cart */
+.cart-page > p {
+  text-align: center;
+  font-size: 16px;
+  opacity: 0.9;
+  animation: fadeUp 0.8s ease;
+}
+
+/* =========================
+   CART ITEM
+========================= */
+.cart-item {
+  max-width: 900px;
+  margin: 0 auto 20px;
+  background: #ffffff;
+  color: #333;
+  border-radius: 18px;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  animation: fadeUp 0.9s ease;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cart-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.cart-item:hover::before {
+  transform: translateX(100%);
+}
+
+.cart-item:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.3);
+}
+
+/* =========================
+   CART IMAGE
+========================= */
+.cart-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================
+   CART DETAILS
+========================= */
+.cart-item div {
+  flex: 1;
+}
+
+.cart-item h4 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.cart-item p {
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #666;
+}
+
+/* =========================
+   QUANTITY INPUT
+========================= */
+.cart-item input {
+  width: 70px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  margin-right: 10px;
+  font-size: 14px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cart-item input:focus {
+  border-color: #43cea2;
+  box-shadow: 0 0 0 3px rgba(67, 206, 162, 0.3);
+}
+
+/* =========================
+   REMOVE BUTTON
+========================= */
+.cart-item button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cart-item button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 65, 108, 0.5);
+}
+
+.cart-item button:active {
+  transform: scale(0.96);
+}
+
+/* =========================
+   TOTAL SECTION
+========================= */
+.cart-page h2 {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 26px;
+  animation: fadeUp 1s ease;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+@media (max-width: 768px) {
+  .cart-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cart-item img {
+    width: 140px;
+    height: 140px;
+  }
+
+  .cart-item input {
+    margin: 10px 0;
+  }
+
+  .cart-page h1 {
+    font-size: 26px;
+  }
+
+  .cart-page h2 {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-page {
+    padding: 80px 15px 30px;
+  }
+
+  .cart-item {
+    padding: 16px;
+  }
+
+  .cart-item h4 {
+    font-size: 16px;
+  }
+
+  .cart-item p {
+    font-size: 14px;
+  }
+
+  .cart-item button {
+    width: 100%;
+    margin-top: 10px;
+  }
+}

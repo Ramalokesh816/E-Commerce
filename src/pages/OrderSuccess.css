@@ -1,0 +1,191 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* =========================
+   ORDER SUCCESS PAGE
+========================= */
+.order-success {
+  min-height: 100vh;
+  padding: 110px 20px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* =========================
+   SUCCESS CARD
+========================= */
+.success-card {
+  background: #ffffff;
+  padding: 50px 40px;
+  border-radius: 24px;
+  text-align: center;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+  animation: popIn 0.9s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative glow */
+.success-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top,
+    rgba(34, 197, 94, 0.25),
+    transparent 60%
+  );
+  opacity: 0.8;
+}
+
+/* =========================
+   TEXT
+========================= */
+.success-card h1 {
+  font-size: 32px;
+  margin-bottom: 14px;
+  color: #16a34a;
+  animation: slideDown 0.8s ease;
+}
+
+.success-card p {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  animation: fadeUp 0.9s ease;
+}
+
+/* =========================
+   BUTTON
+========================= */
+.success-card button {
+  padding: 14px 32px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: bounceIn 1.2s ease;
+}
+
+.success-card button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 35px rgba(34, 197, 94, 0.5);
+}
+
+.success-card button:active {
+  transform: scale(0.96);
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  80% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+@media (max-width: 768px) {
+  .success-card {
+    padding: 40px 30px;
+  }
+
+  .success-card h1 {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-success {
+    padding: 100px 15px 50px;
+  }
+
+  .success-card {
+    padding: 32px 22px;
+  }
+
+  .success-card h1 {
+    font-size: 22px;
+  }
+
+  .success-card p {
+    font-size: 14px;
+  }
+
+  .success-card button {
+    width: 100%;
+  }
+}
