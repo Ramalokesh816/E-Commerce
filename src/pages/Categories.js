@@ -4,19 +4,21 @@ import Footer from "../components/Footer";
 import "./Categories.css";
 
 function Categories() {
+
   const navigate = useNavigate();
 
   return (
     <>
       <Header />
 
-      {/* PAGE HEADER */}
+      {/* HERO */}
       <section className="category-hero">
         <h1>Shop by Category</h1>
         <p>Explore products across all categories</p>
       </section>
 
       {/* CATEGORY GRID */}
+
       <section className="category-section">
 
         <div
@@ -26,7 +28,6 @@ function Categories() {
           <img
             src="https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg"
             alt="Fashion"
-            onError={(e) => (e.target.src = "https://via.placeholder.com/400")}
           />
           <h3>Fashion</h3>
         </div>
@@ -38,7 +39,6 @@ function Categories() {
           <img
             src="https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg"
             alt="Electronics"
-            onError={(e) => (e.target.src = "https://via.placeholder.com/400")}
           />
           <h3>Electronics</h3>
         </div>
@@ -50,7 +50,6 @@ function Categories() {
           <img
             src="https://images.unsplash.com/photo-1542838132-92c53300491e"
             alt="Groceries"
-            onError={(e) => (e.target.src = "https://via.placeholder.com/400")}
           />
           <h3>Groceries</h3>
         </div>
@@ -62,7 +61,6 @@ function Categories() {
           <img
             src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg"
             alt="Home"
-            onError={(e) => (e.target.src = "https://via.placeholder.com/400")}
           />
           <h3>Home & Living</h3>
         </div>
@@ -74,7 +72,6 @@ function Categories() {
           <img
             src="https://images.pexels.com/photos/3373744/pexels-photo-3373744.jpeg"
             alt="Beauty"
-            onError={(e) => (e.target.src = "https://via.placeholder.com/400")}
           />
           <h3>Beauty</h3>
         </div>
@@ -84,6 +81,7 @@ function Categories() {
       <Footer />
     </>
   );
+
 }
 
 export default Categories;

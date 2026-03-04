@@ -1,0 +1,106 @@
+/* PAGE BACKGROUND */
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #f5f7ff, #eef2ff);
+}
+
+/* CONTAINER */
+.edit-product-container {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  animation: slideFade 0.6s ease;
+}
+
+/* TITLE */
+.edit-product-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #222;
+  font-weight: 600;
+}
+
+/* FORM */
+.edit-product-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* INPUTS */
+.edit-product-form input,
+.edit-product-form textarea {
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* INPUT FOCUS */
+.edit-product-form input:focus,
+.edit-product-form textarea:focus {
+  border-color: #4a7cff;
+  box-shadow: 0 0 6px rgba(74,124,255,0.3);
+  transform: scale(1.02);
+}
+
+/* TEXTAREA */
+.edit-product-form textarea {
+  resize: none;
+  height: 90px;
+}
+
+/* BUTTON */
+.edit-product-form button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #4a7cff, #6a5cff);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* BUTTON HOVER */
+.edit-product-form button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(74,124,255,0.35);
+}
+
+/* BUTTON CLICK */
+.edit-product-form button:active {
+  transform: scale(0.97);
+}
+
+/* ANIMATION */
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .edit-product-container {
+    margin: 20px;
+    padding: 25px;
+  }
+
+  .edit-product-form input,
+  .edit-product-form textarea {
+    font-size: 14px;
+  }
+
+}

@@ -1,0 +1,140 @@
+/* PAGE */
+.admin-dashboard {
+  padding: 40px;
+  font-family: "Poppins", sans-serif;
+  animation: fadeIn 0.6s ease;
+}
+
+/* TITLE */
+.admin-dashboard h2 {
+  margin-bottom: 20px;
+  color: #222;
+  font-weight: 600;
+}
+
+/* ADD PRODUCT BUTTON */
+.add-btn {
+  padding: 10px 18px;
+  border: none;
+  background: linear-gradient(135deg, #4a7cff, #6a5cff);
+  color: white;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(74,124,255,0.3);
+}
+
+/* TABLE */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 25px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* TABLE HEADER */
+.admin-table thead {
+  background: #4a7cff;
+  color: white;
+}
+
+.admin-table th {
+  padding: 14px;
+  text-align: left;
+}
+
+/* TABLE ROW */
+.admin-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+/* HOVER ROW */
+.admin-table tbody tr:hover {
+  background: #f6f9ff;
+  transition: 0.3s;
+}
+
+/* EDIT BUTTON */
+.edit-btn {
+  padding: 6px 12px;
+  margin-right: 8px;
+  border: none;
+  background: #28a745;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.edit-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* DELETE BUTTON */
+.delete-btn {
+  padding: 6px 12px;
+  border: none;
+  background: #dc3545;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.delete-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* PAGE ANIMATION */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table,
+  .admin-table tbody,
+  .admin-table tr,
+  .admin-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-table tr {
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    padding: 10px;
+  }
+
+  .admin-table td {
+    padding: 10px;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+  }
+
+}

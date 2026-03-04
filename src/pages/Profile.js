@@ -1,98 +1,111 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { useOrders } from "../context/OrderContext";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+
 import "./Profile.css";
 
 function Profile() {
-  const { user, logout } = useAuth();
-  const { orders } = useOrders();
+
   const navigate = useNavigate();
 
-  // redirect safety
-  if (!user) {
+  const [userId,setUserId] = useState("");
+
+  useEffect(()=>{
+
+    const storedUserId = localStorage.getItem("userId");
+
+    if(!storedUserId){
+
+      navigate("/login");
+
+    }else{
+
+      setUserId(storedUserId);
+
+    }
+
+  },[navigate]);
+
+  const handleLogout = ()=>{
+
+    localStorage.removeItem("userId");
     navigate("/login");
-    return null;
-  }
 
-  // get saved address
-  const address = JSON.parse(localStorage.getItem("address"));
+  };
 
-  return (
+  return(
     <>
-      <Header />
+      <Header/>
 
       <section className="profile-page">
-        {/* HEADER */}
+
         <div className="profile-header">
-          <div className="profile-avatar">
-            {user.name ? user.name.charAt(0).toUpperCase() : "U"}
-          </div>
-          <h2>{user.name || "User"}</h2>
-          <p>{user.email}</p>
+
+          <div className="profile-avatar">U</div>
+
+          <h2>User Profile</h2>
+
+          <p>Welcome to your account</p>
+
         </div>
 
-        {/* GRID */}
+
         <div className="profile-grid">
+
           {/* ACCOUNT INFO */}
+
           <div className="profile-card">
+
             <h3>Account Info</h3>
-            <p><b>Email:</b> {user.email}</p>
-            <p><b>Phone:</b> {user.phone || "Not added"}</p>
+
+            <p><b>User ID:</b></p>
+
+            <p>{userId}</p>
+
           </div>
 
-          {/* ORDERS */}
+
+          {/* ORDERS PAGE BUTTON */}
+
           <div className="profile-card">
+
             <h3>Orders</h3>
-            <p>
-              {orders.length > 0
-                ? `You have ${orders.length} order(s)`
-                : "No orders placed yet"}
-            </p>
 
-            {orders.length > 0 && (
-              <button onClick={() => navigate("/orders")}>
-                View Orders
-              </button>
-            )}
+            <button
+              className="view-orders-btn"
+              onClick={()=>navigate("/orders")}
+            >
+              View My Orders
+            </button>
+
           </div>
 
-          {/* ADDRESS */}
-          <div className="profile-card">
-            <h3>Saved Address</h3>
-
-            {address ? (
-              <p>
-                <b>{address.name}</b><br />
-                {address.street}, {address.city}<br />
-                {address.pincode}<br />
-                📞 {address.phone}
-              </p>
-            ) : (
-              <p>No address saved yet</p>
-            )}
-          </div>
 
           {/* SECURITY */}
+
           <div className="profile-card">
+
             <h3>Security</h3>
+
             <button
               className="logout-btn"
-              onClick={() => {
-                logout();
-                navigate("/");
-              }}
+              onClick={handleLogout}
             >
               Logout
             </button>
+
           </div>
+
         </div>
+
       </section>
 
-      <Footer />
+      <Footer/>
     </>
   );
+
 }
 
 export default Profile;

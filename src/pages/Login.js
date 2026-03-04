@@ -1,64 +1,79 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext"; // Integrated
 import "./Auth.css";
 
-function Login() {
+function Login(){
+
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login } = useAuth(); // Hook into the login function
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+
     e.preventDefault();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-if (!emailRegex.test(email)) {
-  alert("Enter a valid email address");
-  return;
-}
+    try {
 
-if (!passwordRegex.test(password)) {
-  alert(
-    "Password must be at least 8 characters, include 1 uppercase letter and 1 number"
-  );
-  return;
-}
+      const res = await axios.post(
+        "http://localhost:5000/api/users/login",
+        { email, password }
+      );
 
-    // 🔐 DEMO LOGIN (replace with backend later)
-    login({
-      name: "Rama Lokesh",
-      email: email,
-      phone: "+91 9876543210"
-    });
+      console.log("LOGIN RESPONSE:", res.data);
 
-    // ✅ Redirect to Home after login
-    navigate("/");
+      /* UPDATE GLOBAL STATE */
+      login(res.data.user);
+
+      /* SAVE USER ID FOR API CALLS */
+      const userId = res.data.user._id;
+
+      localStorage.setItem("userId", userId);
+
+      console.log("Saved userId:", userId);
+
+      alert("Login successful");
+
+      navigate("/");
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        error.response?.data?.message ||
+        "Login failed"
+      );
+
+    }
+
   };
 
-  return (
+  return(
+
     <div className="auth-container">
-      {/* LEFT SIDE IMAGE */}
+
       <div className="auth-left">
         <img
           src="https://images.unsplash.com/photo-1601597111158-2fceff292cdc"
-          alt="Supermarket"
+          alt=""
         />
       </div>
 
-      {/* RIGHT SIDE FORM */}
       <div className="auth-right">
-        <h2>Welcome Back!</h2>
-        <p>Sign in to continue shopping</p>
+
+        <h2>Login</h2>
 
         <form onSubmit={handleSubmit}>
+
           <input
             type="email"
-            placeholder="Email address"
+            placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e)=>setEmail(e.target.value)}
             required
           />
 
@@ -66,27 +81,22 @@ if (!passwordRegex.test(password)) {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e)=>setPassword(e.target.value)}
             required
           />
 
-          <button type="submit">Sign In</button>
+          <button type="submit">Login</button>
+
         </form>
 
-        <div className="auth-links">
-          <span>
-            Don’t have an account?{" "}
-            <Link to="/register">Create one</Link>
-          </span>
-        </div>
+        <Link to="/register">Create Account</Link>
 
-        <div className="social-login">
-          <button className="google">Sign in with Google</button>
-          <button className="facebook">Sign in with Facebook</button>
-        </div>
       </div>
+
     </div>
+
   );
+
 }
 
 export default Login;

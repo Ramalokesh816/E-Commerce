@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -13,11 +14,26 @@ function OrderSuccess() {
       <section className="order-success">
         <div className="success-card">
           <h1>🎉 Order Placed Successfully!</h1>
-          <p>Your order has been confirmed and will be delivered soon.</p>
 
-          <button onClick={() => navigate("/")}>
-            Continue Shopping
-          </button>
+          <p>
+            Your order has been confirmed and will be delivered soon.
+          </p>
+
+          <div className="success-actions">
+            <button
+              className="btn-primary"
+              onClick={() => navigate("/orders")}
+            >
+              View My Orders
+            </button>
+
+            <button
+              className="btn-secondary"
+              onClick={() => navigate("/")}
+            >
+              Continue Shopping
+            </button>
+          </div>
         </div>
       </section>
 

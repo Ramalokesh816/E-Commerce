@@ -1,0 +1,179 @@
+/* PAGE LAYOUT */
+
+.add-product-page{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:120px 20px 60px;
+  background:linear-gradient(135deg,#f5f7ff,#eef2ff);
+}
+
+
+/* FORM CARD */
+
+.add-product-container{
+
+  width:100%;
+  max-width:700px;
+
+  background:#ffffff;
+
+  padding:40px;
+
+  border-radius:16px;
+
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+
+  animation:fadeUp .6s ease;
+
+}
+
+
+/* TITLE */
+
+.add-product-container h2{
+  text-align:center;
+  margin-bottom:30px;
+  font-size:28px;
+  font-weight:600;
+}
+
+
+/* FORM */
+
+.add-product-container form{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+
+/* INPUT FIELDS */
+
+.add-product-container input,
+.add-product-container textarea{
+
+  width:100%;
+
+  padding:14px 16px;
+
+  border-radius:10px;
+
+  border:1px solid #ddd;
+
+  font-size:14px;
+
+  transition:all .3s ease;
+
+}
+
+
+/* TEXTAREA */
+
+.add-product-container textarea{
+  min-height:120px;
+  resize:none;
+}
+
+
+/* INPUT FOCUS */
+
+.add-product-container input:focus,
+.add-product-container textarea:focus{
+
+  outline:none;
+
+  border-color:#667eea;
+
+  box-shadow:0 0 0 3px rgba(102,126,234,0.2);
+
+}
+
+
+/* BUTTON */
+
+.add-product-container button{
+
+  padding:14px;
+
+  border:none;
+
+  border-radius:12px;
+
+  background:linear-gradient(135deg,#667eea,#764ba2);
+
+  color:white;
+
+  font-size:16px;
+
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:all .3s ease;
+
+}
+
+
+.add-product-container button:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:0 8px 20px rgba(102,126,234,0.4);
+
+}
+
+
+.add-product-container button:active{
+  transform:scale(.97);
+}
+
+
+/* ANIMATION */
+
+@keyframes fadeUp{
+
+  from{
+    opacity:0;
+    transform:translateY(30px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+}
+
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .add-product-container{
+    padding:30px;
+  }
+
+  .add-product-container h2{
+    font-size:24px;
+  }
+
+}
+
+
+@media(max-width:480px){
+
+  .add-product-page{
+    padding:100px 15px 40px;
+  }
+
+  .add-product-container{
+    padding:25px;
+  }
+
+  .add-product-container button{
+    width:100%;
+  }
+
+}

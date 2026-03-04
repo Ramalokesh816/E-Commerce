@@ -1,17 +1,15 @@
 import { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useCart } from "../context/CartContext";
-import { useOrders } from "../context/OrderContext";
-import "./Checkout.css";
 
 function Checkout() {
-  const { cart, clearCart } = useCart();
-  const navigate = useNavigate();
-  const { addOrder } = useOrders();
 
-  const [address, setAddress] = useState({
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
     name: "",
     phone: "",
     street: "",
@@ -19,80 +17,157 @@ function Checkout() {
     pincode: ""
   });
 
-  const total = cart.reduce(
-    (sum, item) => sum + item.price * item.qty,
-    0
-  );
-
-  const formatINR = (v) =>
-    v.toLocaleString("en-IN", {
-      style: "currency",
-      currency: "INR"
-    });
+  /* HANDLE INPUT CHANGE */
 
   const handleChange = (e) => {
-    setAddress({ ...address, [e.target.name]: e.target.value });
+
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
+
   };
 
-  const handlePlaceOrder = () => {
-  const { name, phone, street, city, pincode } = address;
 
-  if (!name || !phone || !street || !city || !pincode) {
-    alert("Please fill all address fields");
-    return;
-  }
+  /* PLACE ORDER */
 
-  addOrder({
-    id: Date.now(),
-    items: cart,
-    address,
-    total,
-    date: new Date().toLocaleString()
-  });
+  const handleSubmit = async (e) => {
 
-  localStorage.setItem("address", JSON.stringify(address));
-  clearCart();
-  navigate("/order-success");
-};
+    e.preventDefault();
+
+    const userId = localStorage.getItem("userId");
+
+    try {
+
+      /* GET CART */
+
+      const cartRes = await axios.get(
+        `http://localhost:5000/api/cart/${userId}`
+      );
+
+      const cart = cartRes.data;
+
+      if (cart.length === 0) {
+
+        alert("Cart is empty");
+        return;
+
+      }
+
+      /* CREATE PRODUCTS ARRAY */
+
+      const products = cart.map(item => ({
+        productId: item.productId._id,
+        quantity: item.quantity
+      }));
+
+      /* CALCULATE TOTAL */
+
+      const total = cart.reduce(
+        (sum, item) =>
+          sum + item.productId.price * item.quantity,
+        0
+      );
+
+      /* PLACE ORDER */
+
+      await axios.post(
+        "http://localhost:5000/api/orders/place",
+        {
+          userId,
+          products,
+          total,
+          address: form
+        }
+      );
+
+      /* CLEAR CART */
+
+      await axios.delete(
+        `http://localhost:5000/api/cart/clear/${userId}`
+      );
+
+      /* REDIRECT TO SUCCESS PAGE */
+
+      navigate("/order-success");
+
+    } catch (error) {
+
+      console.error(error);
+      alert("Error placing order");
+
+    }
+
+  };
+
+
   return (
     <>
       <Header />
 
-      <section className="checkout-page">
-        <h1>Checkout</h1>
+      <div style={{ maxWidth: "600px", margin: "40px auto" }}>
 
-        <div className="checkout-grid">
-          {/* ADDRESS */}
-          <div className="checkout-card">
-            <h3>Delivery Address</h3>
+        <h2>Checkout</h2>
 
-            <input name="name" placeholder="Full Name" onChange={handleChange} />
-            <input name="phone" placeholder="Phone Number" onChange={handleChange} />
-            <input name="street" placeholder="Street Address" onChange={handleChange} />
-            <input name="city" placeholder="City" onChange={handleChange} />
-            <input name="pincode" placeholder="Pincode" onChange={handleChange} />
-          </div>
+        <form onSubmit={handleSubmit}>
 
-          {/* ORDER SUMMARY */}
-          <div className="checkout-card">
-            <h3>Order Summary</h3>
+          <input
+            name="name"
+            placeholder="Full Name"
+            value={form.name}
+            onChange={handleChange}
+            required
+          />
 
-            {cart.map(item => (
-              <div key={item.id} className="summary-item">
-                <span>{item.name} × {item.qty}</span>
-                <span>{formatINR(item.price * item.qty)}</span>
-              </div>
-            ))}
+          <br /><br />
 
-            <hr />
-            <h2>Total: {formatINR(total)}</h2>
+          <input
+            name="phone"
+            placeholder="Phone"
+            value={form.phone}
+            onChange={handleChange}
+            required
+          />
 
-            <button onClick={handlePlaceOrder}>
-              Place Order
-            </button>
-          </div>
-        </div>
-      </section>
+          <br /><br />
+
+          <input
+            name="street"
+            placeholder="Street"
+            value={form.street}
+            onChange={handleChange}
+            required
+          />
+
+          <br /><br />
+
+          <input
+            name="city"
+            placeholder="City"
+            value={form.city}
+            onChange={handleChange}
+            required
+          />
+
+          <br /><br />
+
+          <input
+            name="pincode"
+            placeholder="Pincode"
+            value={form.pincode}
+            onChange={handleChange}
+            required
+          />
+
+          <br /><br />
+
+          <button type="submit">
+            Confirm Order
+          </button>
+
+        </form>
+
+      </div>
 
       <Footer />
     </>

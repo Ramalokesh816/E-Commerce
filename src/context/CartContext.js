@@ -1,63 +1,32 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 const CartContext = createContext();
 
-export function CartProvider({ children }) {
-  const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem("cart");
-    return saved ? JSON.parse(saved) : [];
-  });
+export const useCart = () => useContext(CartContext);
 
-  // persist cart
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+export const CartProvider = ({ children }) => {
+  const [cart, setCart] = useState([]);
 
-  // ADD TO CART (always add qty)
   const addToCart = (product) => {
-    const exists = cart.find(item => item.id === product.id);
-    if (exists) return;
-
-    setCart([...cart, { ...product, qty: 1 }]);
+    const existing = cart.find(item => item._id === product._id);
+    if (existing) {
+      setCart(cart.map(item =>
+        item._id === product._id
+          ? { ...item, quantity: item.quantity + 1 } // Changed qty to quantity
+          : item
+      ));
+    } else {
+      setCart([...cart, { ...product, quantity: 1 }]); // Changed qty to quantity
+    }
   };
 
-  // REMOVE ITEM
   const removeFromCart = (id) => {
-    setCart(cart.filter(item => item.id !== id));
-  };
-
-  // UPDATE QUANTITY (safe)
-  const updateQty = (id, qty) => {
-    if (qty < 1 || isNaN(qty)) return;
-
-    setCart(
-      cart.map(item =>
-        item.id === id ? { ...item, qty } : item
-      )
-    );
-  };
-
-  // ✅ CLEAR CART (THIS FIXES YOUR ERROR)
-  const clearCart = () => {
-    setCart([]);
-    localStorage.removeItem("cart");
+    setCart(cart.filter(item => item._id !== id));
   };
 
   return (
-    <CartContext.Provider
-      value={{
-        cart,
-        addToCart,
-        removeFromCart,
-        updateQty,
-        clearCart   // 👈 VERY IMPORTANT
-      }}
-    >
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );
-}
-
-export function useCart() {
-  return useContext(CartContext);
-}
+};
