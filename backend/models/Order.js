@@ -4,22 +4,40 @@ const orderSchema = new mongoose.Schema({
 
   userId:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"User"
+    ref:"User",
+    required:true
   },
 
   products:[
     {
       productId:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"Product"
+        ref:"Product",
+        required:true
       },
-      quantity:Number
+
+      quantity:{
+        type:Number,
+        default:1
+      }
     }
   ],
 
-  total:Number,
+  total:{
+    type:Number,
+    required:true
+  },
 
-  address:Object,
+  address:{
+    name:String,
+    phone:String,
+    street:String,
+    city:String,
+    pincode:String
+  },
+
+
+  /* ORDER STATUS */
 
   status:{
     type:String,
@@ -33,11 +51,34 @@ const orderSchema = new mongoose.Schema({
     default:"Placed"
   },
 
-  createdAt:{
-    type:Date,
-    default:Date.now
-  }
 
+  /* COURIER */
+
+  courier:{
+    type:String,
+    default:"Delhivery"
+  },
+
+
+  /* TRACKING ID */
+
+  trackingId:{
+    type:String
+  },
+
+
+  /* DELIVERY TIMELINE */
+
+  timeline:[
+    {
+      step:String,
+      date:Date
+    }
+  ]
+
+},{
+  timestamps:true
 });
+
 
 module.exports = mongoose.model("Order",orderSchema);

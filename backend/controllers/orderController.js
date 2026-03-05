@@ -1,32 +1,49 @@
 const Order = require("../models/Order");
 
-/* PLACE ORDER */
 
-const placeOrder = async (req, res) => {
+/* =========================
+   PLACE ORDER
+========================= */
 
-  try {
+const placeOrder = async (req,res)=>{
+
+  try{
 
     const { userId, products, total, address } = req.body;
 
     const order = new Order({
+
       userId,
       products,
       total,
       address,
-      status: "Placed"
+
+      status:"Placed",
+
+      courier:"Delhivery",
+
+      trackingId:"TRK"+Math.floor(Math.random()*1000000),
+
+      timeline:[
+        {
+          step:"Placed",
+          date:new Date()
+        }
+      ]
+
     });
 
     await order.save();
 
     res.json({
-      message: "Order placed successfully",
+      message:"Order placed successfully",
       order
     });
 
-  } catch (error) {
+  }catch(error){
 
     res.status(500).json({
-      message: "Error placing order"
+      message:"Error placing order"
     });
 
   }
@@ -34,7 +51,10 @@ const placeOrder = async (req, res) => {
 };
 
 
-/* GET USER ORDERS */
+
+/* =========================
+   GET USER ORDERS
+========================= */
 
 const getUserOrders = async (req,res)=>{
 
@@ -59,22 +79,33 @@ const getUserOrders = async (req,res)=>{
 };
 
 
-/* GET ALL ORDERS (ADMIN) */
 
-const getAllOrders = async (req,res)=>{
+/* =========================
+   GET ORDER BY ID
+========================= */
+
+const getOrderById = async (req,res)=>{
 
   try{
 
-    const orders = await Order.find()
-      .populate("products.productId")
-      .sort({createdAt:-1});
+    const order = await Order
+      .findById(req.params.id)
+      .populate("products.productId");
 
-    res.json(orders);
+    if(!order){
+
+      return res.status(404).json({
+        message:"Order not found"
+      });
+
+    }
+
+    res.json(order);
 
   }catch(error){
 
     res.status(500).json({
-      message:"Error fetching orders"
+      message:"Error fetching order"
     });
 
   }
@@ -82,7 +113,10 @@ const getAllOrders = async (req,res)=>{
 };
 
 
-/* UPDATE ORDER STATUS */
+
+/* =========================
+   UPDATE ORDER STATUS
+========================= */
 
 const updateOrderStatus = async (req,res)=>{
 
@@ -90,17 +124,24 @@ const updateOrderStatus = async (req,res)=>{
 
     const { status } = req.body;
 
-    const order = await Order.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new:true }
-    );
+    const order = await Order.findById(req.params.id);
 
     if(!order){
+
       return res.status(404).json({
         message:"Order not found"
       });
+
     }
+
+    order.status = status;
+
+    order.timeline.push({
+      step:status,
+      date:new Date()
+    });
+
+    await order.save();
 
     res.json({
       message:"Order status updated",
@@ -116,9 +157,14 @@ const updateOrderStatus = async (req,res)=>{
   }
 
 };
-/* DELETE ORDER */
 
-const deleteOrder = async (req,res)=>{
+
+
+/* =========================
+   CANCEL ORDER
+========================= */
+
+const cancelOrder = async (req,res)=>{
 
   try{
 
@@ -138,10 +184,14 @@ const deleteOrder = async (req,res)=>{
 
 };
 
+
+
 module.exports = {
+
   placeOrder,
   getUserOrders,
-  getAllOrders,
+  getOrderById,
   updateOrderStatus,
-  deleteOrder
+  cancelOrder
+
 };

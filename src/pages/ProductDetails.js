@@ -1,146 +1,157 @@
-import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useCart } from "../context/CartContext";
+
 import "./ProductDetails.css";
 
-function ProductDetails() {
+function ProductDetails(){
+
   const { id } = useParams();
-  const { cart, addToCart } = useCart();
-  const [selectedImage, setSelectedImage] = useState(null);
+  const navigate = useNavigate();
 
-  const products = [
-    {
-      id: "1",
-      name: "Casual Outfit",
-      price: 2499,
-      category: "Fashion",
-      images: [
-        "https://images.pexels.com/photos/298863/pexels-photo-298863.jpeg",
-        "https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg"
-      ],
-      description: "Comfortable and stylish outfit suitable for daily wear."
-    },
-    {
-      id: "2",
-      name: "Sneakers",
-      price: 3199,
-      category: "Fashion",
-      images: [
-        "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg",
-        "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg"
-      ],
-      description: "Lightweight sneakers designed for comfort and durability."
-    },
-    {
-      id: "3",
-      name: "Smartphone",
-      price: 15999,
-      category: "Electronics",
-      images: [
-        "https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg",
-        "https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg"
-      ],
-      description: "High performance smartphone with long battery life."
+  const [product,setProduct] = useState(null);
+  const [loading,setLoading] = useState(true);
+  const [error,setError] = useState("");
+  const [quantity,setQuantity] = useState(1);
+
+  useEffect(()=>{
+
+    const fetchProduct = async()=>{
+
+      try{
+
+        const res = await axios.get(
+          `http://localhost:5000/api/products/${id}`
+        );
+
+        setProduct(res.data);
+
+      }catch(err){
+
+        setError("Failed to load product");
+
+      }finally{
+        setLoading(false);
+      }
+
+    };
+
+    fetchProduct();
+
+  },[id]);
+
+  const formatINR = value =>
+    value.toLocaleString("en-IN",{style:"currency",currency:"INR"});
+
+  const finalPrice = product
+    ? product.price - (product.price * product.discount)/100
+    : 0;
+
+  const addToCart = async()=>{
+
+    const userId = localStorage.getItem("userId");
+
+    if(!userId){
+      alert("Please login first");
+      navigate("/login");
+      return;
     }
-  ];
 
-  const product = products.find(p => p.id === id);
+    try{
 
-  if (!product) {
-    return <h2 style={{ textAlign: "center" }}>Product not found</h2>;
-  }
+      await axios.post(
+        "http://localhost:5000/api/cart/add",
+        {
+          userId,
+          productId:id,
+          quantity
+        }
+      );
 
-  const mainImage = selectedImage || product.images[0];
-  const isInCart = cart.some(item => item.id === product.id);
+      alert("Added to cart");
 
-  const formatINR = (value) =>
-    value.toLocaleString("en-IN", {
-      style: "currency",
-      currency: "INR"
-    });
+    }catch(error){
+      console.error(error);
+    }
 
-  const relatedProducts = products.filter(
-    p => p.category === product.category && p.id !== product.id
-  );
-
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Product link copied to clipboard!");
   };
 
-  return (
-    <>
-      <Header />
+  if(loading) return <p className="loading">Loading product...</p>;
+  if(error) return <p className="error">{error}</p>;
 
-      <section className="product-details">
-        <div className="details-card">
+  return(
 
-          {/* IMAGE GALLERY */}
-          <div className="image-gallery">
-            <img className="main-image" src={mainImage} alt={product.name} />
+  <>
+  
+  <Header/>
 
-            <div className="thumbnail-row">
-              {product.images.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt=""
-                  onClick={() => setSelectedImage(img)}
-                  className={mainImage === img ? "active-thumb" : ""}
-                />
-              ))}
-            </div>
-          </div>
+  <section className="product-container">
 
-          {/* INFO */}
-          <div className="details-info">
-            <h1>{product.name}</h1>
-            <p className="category">{product.category}</p>
-            <h2>{formatINR(product.price)}</h2>
-            <p className="description">{product.description}</p>
+    <div className="product-image">
+      <img src={product.image} alt={product.name}/>
+    </div>
 
-            {/* REVIEWS */}
-            <div className="rating">
-              ⭐⭐⭐⭐☆ (4.0)
-              <p>120 Reviews</p>
-            </div>
+    <div className="product-info">
 
-            <button
-              className={isInCart ? "added" : ""}
-              disabled={isInCart}
-              onClick={() => {
-                if (!isInCart) addToCart(product);
-              }}
-            >
-              {isInCart ? "✓ Added to Cart" : "Add to Cart"}
-            </button>
+      <h1>{product.name}</h1>
 
-            <button className="share-btn" onClick={handleShare}>
-              Share Product 🔗
-            </button>
-          </div>
-        </div>
-      </section>
+      {product.discount > 0 && (
+        <p className="discount-badge">
+          {product.discount}% OFF
+        </p>
+      )}
 
-      {/* RELATED PRODUCTS */}
-      <section className="related-section">
-        <h2>Related Products</h2>
-        <div className="related-grid">
-          {relatedProducts.map(item => (
-            <div key={item.id} className="related-card">
-              <img src={item.images[0]} alt={item.name} />
-              <p>{item.name}</p>
-              <span>{formatINR(item.price)}</span>
-            </div>
-          ))}
-        </div>
-      </section>
+      <div className="price-box">
 
-      <Footer />
-    </>
+        {product.discount > 0 && (
+          <span className="old-price">
+            {formatINR(product.price)}
+          </span>
+        )}
+
+        <span className="price">
+          {formatINR(finalPrice)}
+        </span>
+
+      </div>
+
+      <p className="description">
+        {product.description}
+      </p>
+
+      <div className="quantity">
+
+        <label>Quantity</label>
+
+        <input
+          type="number"
+          value={quantity}
+          min="1"
+          onChange={(e)=>setQuantity(e.target.value)}
+        />
+
+      </div>
+
+      <button
+        className="add-cart-btn"
+        onClick={addToCart}
+      >
+        Add to Cart
+      </button>
+
+    </div>
+
+  </section>
+
+  <Footer/>
+
+  </>
+
   );
+
 }
 
 export default ProductDetails;

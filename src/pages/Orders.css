@@ -1,3 +1,5 @@
+/* PAGE */
+
 .orders-page{
 padding:40px;
 background:#f5f6fa;
@@ -7,44 +9,65 @@ min-height:80vh;
 .orders-page h1{
 text-align:center;
 margin-bottom:30px;
+font-size:32px;
 }
+
+
+/* ORDER CARD */
 
 .order-card{
 background:white;
 padding:25px;
 border-radius:15px;
-margin-bottom:25px;
-box-shadow:0 5px 15px rgba(0,0,0,0.08);
+margin-bottom:30px;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
+transition:0.3s;
 }
+
+.order-card:hover{
+transform:translateY(-3px);
+}
+
+
+/* ORDER HEADER */
 
 .order-header{
 display:flex;
 justify-content:space-between;
-margin-bottom:15px;
+margin-bottom:20px;
 font-size:14px;
 color:#555;
 }
+
+
+/* PRODUCT SECTION */
 
 .order-product{
 display:flex;
 align-items:center;
 gap:15px;
-margin-bottom:12px;
+margin-bottom:15px;
 }
 
 .order-product img{
 width:60px;
 height:60px;
 object-fit:cover;
-border-radius:8px;
+border-radius:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.15);
 }
 
 .product-name{
 font-weight:600;
+font-size:15px;
 }
+
+
+/* PRICE */
 
 .order-total{
 font-weight:bold;
+font-size:16px;
 margin-top:10px;
 }
 
@@ -54,53 +77,140 @@ font-size:14px;
 margin-top:5px;
 }
 
-.order-tracker{
+
+/* =========================
+   PROGRESS TRACKER
+========================= */
+
+.tracker-container{
+position:relative;
 display:flex;
 justify-content:space-between;
-margin-top:20px;
+margin-top:30px;
+padding-top:10px;
 }
+
+
+/* progress background line */
+
+.tracker-container::before{
+content:"";
+position:absolute;
+top:18px;
+left:0;
+width:100%;
+height:4px;
+background:#e0e0e0;
+z-index:1;
+border-radius:10px;
+}
+
+
+/* animated progress fill */
+
+.tracker-container::after{
+content:"";
+position:absolute;
+top:18px;
+left:0;
+height:4px;
+background:#27ae60;
+z-index:2;
+border-radius:10px;
+transition:width 0.6s ease;
+}
+
+
+/* STEP */
 
 .tracker-step{
 flex:1;
 text-align:center;
 position:relative;
+z-index:3;
 }
+
+
+/* CIRCLE */
 
 .circle{
-width:18px;
-height:18px;
+width:20px;
+height:20px;
 border-radius:50%;
-background:#ccc;
+background:#d0d0d0;
 margin:auto;
+transition:0.3s;
+border:3px solid white;
 }
 
+
+/* ACTIVE STEP */
+
 .tracker-step.active .circle{
-background:#2ecc71;
+background:#27ae60;
+transform:scale(1.2);
+box-shadow:0 0 10px rgba(39,174,96,0.5);
 }
+
+
+/* LABEL */
 
 .tracker-step p{
 font-size:12px;
-margin-top:6px;
+margin-top:8px;
+color:#666;
 }
 
-.tracker-step::after{
-content:"";
-position:absolute;
-top:9px;
-left:50%;
-width:100%;
-height:3px;
-background:#ccc;
-z-index:-1;
+
+/* =========================
+   TRACKING INFO
+========================= */
+
+.tracking-info{
+margin-top:20px;
+font-size:14px;
+color:#444;
+line-height:22px;
 }
 
-.tracker-step.active::after{
-background:#2ecc71;
+
+/* =========================
+   TIMELINE
+========================= */
+
+.timeline{
+margin-top:25px;
 }
 
-.tracker-step:last-child::after{
-display:none;
+.timeline h4{
+margin-bottom:10px;
+color:#27ae60;
 }
+
+.timeline-item{
+display:flex;
+align-items:flex-start;
+margin-bottom:12px;
+}
+
+.timeline-dot{
+width:12px;
+height:12px;
+background:#27ae60;
+border-radius:50%;
+margin-right:12px;
+margin-top:5px;
+}
+
+.timeline-item span{
+font-size:13px;
+color:#777;
+}
+
+
+/* =========================
+   CANCEL BUTTON
+========================= */
 
 .order-actions{
 margin-top:20px;
@@ -110,16 +220,14 @@ margin-top:20px;
 background:#ff4d4f;
 color:white;
 border:none;
-padding:10px 18px;
-border-radius:6px;
+padding:12px 22px;
+border-radius:8px;
+font-weight:600;
 cursor:pointer;
+transition:0.3s;
 }
 
 .cancel-btn:hover{
 background:#d9363e;
-}
-.cancel-disabled{
-font-size:13px;
-color:#888;
-margin-top:10px;
+transform:scale(1.05);
 }

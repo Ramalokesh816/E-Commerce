@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Header from "../components/Header";
@@ -7,6 +8,7 @@ import Footer from "../components/Footer";
 import "./Orders.css";
 
 function Orders(){
+  const navigate = useNavigate();
 
   const [orders,setOrders] = useState([]);
 
@@ -19,6 +21,9 @@ function Orders(){
     "Out for Delivery",
     "Delivered"
   ];
+
+
+  /* FETCH ORDERS */
 
   useEffect(()=>{
 
@@ -45,6 +50,8 @@ function Orders(){
   },[userId]);
 
 
+  /* CANCEL ORDER */
+
   const cancelOrder = async(orderId)=>{
 
     try{
@@ -68,8 +75,13 @@ function Orders(){
   };
 
 
+  /* PRICE FORMAT */
+
   const formatINR = value =>
-    value.toLocaleString("en-IN",{style:"currency",currency:"INR"});
+    value.toLocaleString("en-IN",{
+      style:"currency",
+      currency:"INR"
+    });
 
 
   return(
@@ -84,68 +96,101 @@ function Orders(){
           <p>No orders yet</p>
         )}
 
-        {orders.map(order=>(
 
-          <div key={order._id} className="order-card">
+        {orders.map(order=>{
 
-            <div className="order-header">
+          const currentIndex =
+            statusSteps.indexOf(order.status || "Placed");
 
-              <p><b>Order ID:</b> {order._id}</p>
-
-              <p>
-                Date: {new Date(order.createdAt).toLocaleDateString()}
-              </p>
-
-            </div>
+          const progress =
+            (currentIndex/(statusSteps.length-1))*100;
 
 
-            {order.products.map(item=>(
+          return(
 
-              <div key={item._id} className="order-product">
+            <div
+  key={order._id}
+  className="order-card"
+  onClick={() => navigate(`/orders/${order._id}`)}
+>
+              {/* ORDER HEADER */}
 
-                <img
-                  src={item.productId?.image}
-                  alt={item.productId?.name}
-                />
+              <div className="order-header">
 
-                <div>
+                <p>
+                  <b>Order ID:</b> {order._id}
+                </p>
 
-                  <p className="product-name">
-                    {item.productId?.name}
-                  </p>
-
-                  <p>Quantity: {item.quantity}</p>
-
-                </div>
+                <p>
+                  Date: {new Date(order.createdAt)
+                    .toLocaleDateString()}
+                </p>
 
               </div>
 
-            ))}
+
+              {/* PRODUCTS */}
+
+              {order.products.map(item=>(
+
+                <div
+                  key={item._id}
+                  className="order-product"
+                >
+
+                  <img
+                    src={item.productId?.image}
+                    alt={item.productId?.name}
+                  />
+
+                  <div>
+
+                    <p className="product-name">
+                      {item.productId?.name}
+                    </p>
+
+                    <p>
+                      Quantity: {item.quantity}
+                    </p>
+
+                  </div>
+
+                </div>
+
+              ))}
 
 
-            <p className="order-total">
-              Total: {formatINR(order.total)}
-            </p>
+              {/* TOTAL */}
+
+              <p className="order-total">
+                Total: {formatINR(order.total)}
+              </p>
 
 
-            <p className="delivery-date">
-              Estimated Delivery: {" "}
-              {new Date(
-                new Date(order.createdAt).getTime() + 5*24*60*60*1000
-              ).toLocaleDateString()}
-            </p>
+              {/* DELIVERY DATE */}
+
+              <p className="delivery-date">
+
+                Estimated Delivery:
+
+                {new Date(
+                  new Date(order.createdAt).getTime()
+                  + 5*24*60*60*1000
+                ).toLocaleDateString()}
+
+              </p>
 
 
-            {/* STATUS TRACKER */}
+              {/* TRACKER */}
 
-            <div className="order-tracker">
+              <div
+                className="tracker-container"
+                style={{
+                  "--progress":`${progress}%`
+                }}
+              >
 
-              {statusSteps.map((step,index)=>{
-
-                const currentIndex =
-                  statusSteps.indexOf(order.status || "Placed");
-
-                return(
+                {statusSteps.map((step,index)=>(
 
                   <div
                     key={step}
@@ -162,33 +207,83 @@ function Orders(){
 
                   </div>
 
-                );
+                ))}
 
-              })}
-
-            </div>
+              </div>
 
 
-            {/* CANCEL BUTTON */}
+              {/* TRACKING INFO */}
 
-            <div className="order-actions">
+              <div className="tracking-info">
 
-              {order.status === "Placed" && (
+                <p>
+                  <b>Courier:</b> {order.courier}
+                </p>
 
-                <button
-                  className="cancel-btn"
-                  onClick={()=>cancelOrder(order._id)}
-                >
-                  Cancel Order
-                </button>
+                <p>
+                  <b>Tracking ID:</b> {order.trackingId}
+                </p>
+
+              </div>
+
+
+              {/* TIMELINE */}
+
+              <div className="timeline">
+
+                <h4>Delivery Updates</h4>
+
+                {order.timeline?.map((item,index)=>(
+
+                  <div
+                    key={index}
+                    className="timeline-item"
+                  >
+
+                    <div className="timeline-dot"></div>
+
+                    <div>
+
+                      <p>{item.step}</p>
+
+                      <span>
+                        {new Date(item.date)
+                          .toLocaleString()}
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                ))}
+
+              </div>
+
+
+              {/* CANCEL BUTTON */}
+
+              {(order.status || "Placed") === "Placed" && (
+
+                <div className="order-actions">
+
+                  <button
+                    className="cancel-btn"
+                    onClick={() =>
+                      cancelOrder(order._id)
+                    }
+                  >
+                    Cancel Order
+                  </button>
+
+                </div>
 
               )}
 
             </div>
 
-          </div>
+          )
 
-        ))}
+        })}
 
       </section>
 

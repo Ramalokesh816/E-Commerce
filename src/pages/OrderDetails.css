@@ -1,0 +1,163 @@
+.order-details {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.order-details h1 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Main Card Styling */
+.details-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Horizontal Tracker Fix */
+.tracker-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  margin: 40px 0;
+  width: 100%;
+}
+
+.tracker-container::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 5%;
+  width: 90%;
+  height: 4px;
+  background: #eee;
+  z-index: 1;
+}
+
+.tracker-container::after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 5%;
+  width: calc(var(--progress) * 0.9); /* Adjusts line to match step spacing */
+  height: 4px;
+  background: #4caf50;
+  z-index: 2;
+  transition: width 0.4s ease-in-out;
+}
+
+.tracker-step {
+  position: relative;
+  z-index: 3;
+  width: 100px; /* Fixed width prevents text from bunching */
+  text-align: center;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border: 4px solid #eee;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+}
+
+.tracker-step.active .circle {
+  border-color: #4caf50;
+  background: #4caf50;
+}
+
+.tracker-step p {
+  font-size: 12px;
+  color: #777;
+  margin: 0;
+}
+
+/* Product Section - Vertical List */
+.order-product {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px;
+  background: #fdfdfd;
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+}
+
+.order-product img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+/* Summary Grid (Address, Total, Courier) */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.address h4, .tracking-info h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.address p {
+  font-size: 14px;
+  color: #555;
+  margin: 2px 0;
+}
+
+.tracking-info {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+h3 {
+  color: #ff8c00;
+  font-size: 22px;
+}
+
+/* Timeline/Delivery Updates */
+.timeline {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.timeline-dot {
+  width: 10px;
+  height: 10px;
+  background: #4caf50;
+  border-radius: 50%;
+  margin-top: 5px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tracker-step p {
+    font-size: 10px;
+    width: 60px;
+  }
+}

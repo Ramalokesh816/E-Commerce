@@ -1,27 +1,39 @@
 const express = require("express");
+
 const router = express.Router();
 
 const {
   placeOrder,
   getUserOrders,
+  getOrderById,
   updateOrderStatus,
-  deleteOrder
+  cancelOrder
 } = require("../controllers/orderController");
+
 
 /* PLACE ORDER */
 
-router.post("/place", placeOrder);
+router.post("/place",placeOrder);
+
 
 /* GET USER ORDERS */
 
-router.get("/:userId", getUserOrders);
+router.get("/:userId",getUserOrders);
 
-/* UPDATE ORDER STATUS */
 
-router.put("/status/:id", updateOrderStatus);
+/* GET ORDER DETAILS */
 
-/* DELETE ORDER  */
+router.get("/details/:id",getOrderById);
 
-router.delete("/cancel/:id", deleteOrder);
+
+/* UPDATE STATUS (ADMIN) */
+
+router.put("/status/:id",updateOrderStatus);
+
+
+/* CANCEL ORDER */
+
+router.delete("/cancel/:id",cancelOrder);
+
 
 module.exports = router;

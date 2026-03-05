@@ -20,6 +20,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import EditProduct from "./pages/EditProduct";
 import Orders from "./pages/Orders";
+import OrderDetails from "./pages/OrderDetails";
 function App() {
   return (
     <AuthProvider>
@@ -41,6 +42,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/edit-product/:id" element={<EditProduct />} />
+          <Route path="/orders/:id" element={<OrderDetails />} />
 <Route path="/register" element={<Register />} />
 <Route path="/profile" element={
               <ProtectedRoute><Profile /></ProtectedRoute>

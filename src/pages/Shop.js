@@ -51,6 +51,8 @@ function Shop() {
 
   }, []);
 
+  /* CATEGORY CHANGE */
+
   useEffect(() => {
 
     if (category && categoryMap[category]) {
@@ -61,7 +63,7 @@ function Shop() {
 
   }, [category]);
 
-  /* FILTER */
+  /* FILTER PRODUCTS */
 
   let filteredProducts =
     activeCategory === "all"
@@ -73,6 +75,8 @@ function Shop() {
   filteredProducts = filteredProducts.filter(p =>
     p.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  /* SORT PRODUCTS */
 
   if (sort === "low") {
     filteredProducts = [...filteredProducts].sort((a,b)=>a.price-b.price);
@@ -174,7 +178,11 @@ function Shop() {
 
         {filteredProducts.map(product => (
 
-          <div key={product._id} className="product-card">
+          <div
+            key={product._id}
+            className="product-card"
+            onClick={()=>navigate(`/product/${product._id}`)}
+          >
 
             <img src={product.image} alt={product.name}/>
 
@@ -183,7 +191,10 @@ function Shop() {
             <p className="price">{formatINR(product.price)}</p>
 
             <button
-              onClick={()=>addToCart(product._id)}
+              onClick={(e)=>{
+                e.stopPropagation(); // prevent navigation
+                addToCart(product._id);
+              }}
             >
               Add to Cart
             </button>
