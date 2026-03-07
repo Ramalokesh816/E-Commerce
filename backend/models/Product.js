@@ -2,52 +2,34 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
 
-  name: {
-    type: String,
-    required: true,
-    trim: true
+  name:{
+    type:String,
+    required:true
   },
 
-  price: {
-    type: Number,
-    required: true
+  price:{
+    type:Number,
+    required:true
   },
 
-  category: {
-    type: String,
-    required: true
+  description:String,
+
+  image:String,
+
+  category:String,
+
+  stock:{
+    type:Number,
+    default:50
   },
 
-  image: {
-    type: String,
-    required: true
-  },
-
-  description: {
-    type: String,
-    default: ""
-  },
-
-  stock: {
-    type: Number,
-    default: 0
-  },
-
-  /* DISCOUNT FOR DEALS PAGE */
-  discount: {
-    type: Number,
-    default: 0
-  },
-
-  /* DEAL EXPIRY DATE */
-  dealExpiry: {
-    type: Date,
-    default: null
+  discount:{
+    type:Number,
+    default:0
   }
 
-},
-{
-  timestamps: true   // automatically creates createdAt and updatedAt
+},{
+  timestamps:true
 });
 
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.model("Product",productSchema);

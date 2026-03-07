@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
+
 /* REGISTER USER */
 
 const registerUser = async (req, res) => {
@@ -64,7 +65,8 @@ const loginUser = async (req, res) => {
       user: {
         _id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        profileImage:user.profileImage
       }
     });
 
@@ -78,7 +80,58 @@ const loginUser = async (req, res) => {
 
 };
 
+
+/* GET USER PROFILE */
+
+const getUserProfile = async(req,res)=>{
+
+  try{
+
+    const user = await User.findById(req.params.id);
+
+    res.json(user);
+
+  }catch(error){
+
+    res.status(500).json({
+      message:"Error fetching user"
+    });
+
+  }
+
+};
+
+
+/* UPDATE PROFILE IMAGE */
+
+const updateProfileImage = async(req,res)=>{
+
+  try{
+
+    const { image } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { profileImage:image },
+      { new:true }
+    );
+
+    res.json(user);
+
+  }catch(error){
+
+    res.status(500).json({
+      message:"Error updating profile image"
+    });
+
+  }
+
+};
+
+
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  getUserProfile,
+  updateProfileImage
 };

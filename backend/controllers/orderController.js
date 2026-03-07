@@ -66,7 +66,30 @@ const getUserOrders = async (req,res)=>{
     .populate("products.productId")
     .sort({createdAt:-1});
 
-    res.json(orders);
+    const now = new Date();
+
+    const updatedOrders = orders.map(order=>{
+
+      const created = new Date(order.createdAt);
+
+      const diffDays =
+        Math.floor((now - created) / (1000*60*60*24));
+
+      let status = "Placed";
+
+      if(diffDays >= 2) status = "Packed";
+      if(diffDays >= 3) status = "Shipped";
+      if(diffDays >= 5) status = "Out for Delivery";
+      if(diffDays >= 6) status = "Delivered";
+
+      return {
+        ...order._doc,
+        status
+      };
+
+    });
+
+    res.json(updatedOrders);
 
   }catch(error){
 
@@ -164,26 +187,31 @@ const updateOrderStatus = async (req,res)=>{
    CANCEL ORDER
 ========================= */
 
-const cancelOrder = async (req,res)=>{
+const cancelOrder = async (req, res) => {
 
-  try{
+  try {
 
-    await Order.findByIdAndDelete(req.params.id);
+    const order = await Order.findByIdAndDelete(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({
+        message: "Order not found"
+      });
+    }
 
     res.json({
-      message:"Order cancelled successfully"
+      message: "Order cancelled successfully"
     });
 
-  }catch(error){
+  } catch (error) {
 
     res.status(500).json({
-      message:"Error cancelling order"
+      message: "Error cancelling order"
     });
 
   }
 
 };
-
 
 
 module.exports = {

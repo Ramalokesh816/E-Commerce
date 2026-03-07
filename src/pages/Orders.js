@@ -8,9 +8,11 @@ import Footer from "../components/Footer";
 import "./Orders.css";
 
 function Orders(){
+
   const navigate = useNavigate();
 
   const [orders,setOrders] = useState([]);
+  const [loading,setLoading] = useState(true);
 
   const userId = localStorage.getItem("userId");
 
@@ -24,12 +26,11 @@ function Orders(){
 
 
   /* FETCH ORDERS */
-
   useEffect(()=>{
 
-    const fetchOrders = async()=>{
+    const fetchOrders = async () => {
 
-      try{
+      try {
 
         const res = await axios.get(
           `http://localhost:5000/api/orders/${userId}`
@@ -37,9 +38,13 @@ function Orders(){
 
         setOrders(res.data);
 
-      }catch(error){
+      } catch (error) {
 
         console.error(error);
+
+      } finally {
+
+        setLoading(false);
 
       }
 
@@ -52,7 +57,9 @@ function Orders(){
 
   /* CANCEL ORDER */
 
-  const cancelOrder = async(orderId)=>{
+  const cancelOrder = async (orderId,e) => {
+
+    e.stopPropagation();
 
     try{
 
@@ -60,15 +67,16 @@ function Orders(){
         `http://localhost:5000/api/orders/cancel/${orderId}`
       );
 
-      setOrders(
-        orders.filter(order => order._id !== orderId)
+      setOrders(prev =>
+        prev.filter(order => order._id !== orderId)
       );
 
-      alert("Order cancelled");
+      alert("Order cancelled successfully");
 
     }catch(error){
 
       console.error(error);
+      alert("Failed to cancel order");
 
     }
 
@@ -84,6 +92,18 @@ function Orders(){
     });
 
 
+  if(loading){
+    return <p style={{textAlign:"center"}}>Loading orders...</p>;
+  }
+
+
+  /* HIDE DELIVERED ORDERS */
+
+  const activeOrders = orders.filter(
+    order => order.status !== "Delivered"
+  );
+
+
   return(
     <>
       <Header/>
@@ -92,12 +112,12 @@ function Orders(){
 
         <h1>My Orders</h1>
 
-        {orders.length === 0 && (
+        {activeOrders.length === 0 && (
           <p>No orders yet</p>
         )}
 
 
-        {orders.map(order=>{
+        {activeOrders.map(order=>{
 
           const currentIndex =
             statusSteps.indexOf(order.status || "Placed");
@@ -109,10 +129,11 @@ function Orders(){
           return(
 
             <div
-  key={order._id}
-  className="order-card"
-  onClick={() => navigate(`/orders/${order._id}`)}
->
+              key={order._id}
+              className="order-card"
+              onClick={() => navigate(`/orders/${order._id}`)}
+            >
+
               {/* ORDER HEADER */}
 
               <div className="order-header">
@@ -268,8 +289,8 @@ function Orders(){
 
                   <button
                     className="cancel-btn"
-                    onClick={() =>
-                      cancelOrder(order._id)
+                    onClick={(e)=>
+                      cancelOrder(order._id,e)
                     }
                   >
                     Cancel Order
