@@ -141,6 +141,8 @@ function Profile(){
 
         <div className="profile-grid">
 
+          {/* ACCOUNT INFO */}
+
           <div className="profile-card">
 
             <h3>Account Info</h3>
@@ -152,6 +154,8 @@ function Profile(){
           </div>
 
 
+          {/* ACTIVE ORDERS */}
+
           <div className="profile-card">
 
             <h3>Orders</h3>
@@ -162,15 +166,27 @@ function Profile(){
             >
               View My Orders
             </button>
-            <button
-className="orders-btn"
-onClick={() => navigate("/order-history")}
->
-Order History
-</button>
 
           </div>
 
+
+          {/* ORDER HISTORY (NEW CARD) */}
+
+          <div className="profile-card">
+
+            <h3>Order History</h3>
+
+            <button
+              className="view-orders-btn"
+              onClick={()=>navigate("/order-history")}
+            >
+              View Delivered Orders
+            </button>
+
+          </div>
+
+
+          {/* SECURITY */}
 
           <div className="profile-card">
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -9,309 +9,298 @@ import "./Orders.css";
 
 function Orders(){
 
-  const navigate = useNavigate();
+const [orders,setOrders] = useState([]);
+const [loading,setLoading] = useState(true);
 
-  const [orders,setOrders] = useState([]);
-  const [loading,setLoading] = useState(true);
+const userId = localStorage.getItem("userId");
 
-  const userId = localStorage.getItem("userId");
+const navigate = useNavigate();
 
-  const statusSteps = [
-    "Placed",
-    "Packed",
-    "Shipped",
-    "Out for Delivery",
-    "Delivered"
-  ];
+const statusSteps = [
+"Placed",
+"Packed",
+"Shipped",
+"Out for Delivery",
+"Delivered"
+];
 
 
-  /* FETCH ORDERS */
-  useEffect(()=>{
+/* FETCH ORDERS */
 
-    const fetchOrders = async () => {
+useEffect(()=>{
 
-      try {
+const fetchOrders = async ()=>{
 
-        const res = await axios.get(
-          `http://localhost:5000/api/orders/${userId}`
-        );
+try{
 
-        setOrders(res.data);
+const res = await axios.get(
+`http://localhost:5000/api/orders/${userId}`
+);
 
-      } catch (error) {
+setOrders(res.data);
 
-        console.error(error);
+}catch(error){
 
-      } finally {
+console.error(error);
 
-        setLoading(false);
+}finally{
 
-      }
+setLoading(false);
 
-    };
+}
 
-    fetchOrders();
+};
 
-  },[userId]);
+/* first load */
+fetchOrders();
 
+/* auto refresh every 10 seconds */
 
-  /* CANCEL ORDER */
+const interval = setInterval(()=>{
+fetchOrders();
+},10000);
 
-  const cancelOrder = async (orderId,e) => {
+return ()=>clearInterval(interval);
 
-    e.stopPropagation();
+},[userId]);
 
-    try{
+/* CANCEL ORDER */
 
-      await axios.delete(
-        `http://localhost:5000/api/orders/cancel/${orderId}`
-      );
+const cancelOrder = async(orderId,e)=>{
 
-      setOrders(prev =>
-        prev.filter(order => order._id !== orderId)
-      );
+e.stopPropagation();
 
-      alert("Order cancelled successfully");
+try{
 
-    }catch(error){
+await axios.delete(
+`http://localhost:5000/api/orders/cancel/${orderId}`
+);
 
-      console.error(error);
-      alert("Failed to cancel order");
+setOrders(prev =>
+prev.filter(order => order._id !== orderId)
+);
 
-    }
+alert("Order cancelled successfully");
 
-  };
+}catch(error){
 
+console.error(error);
+alert("Failed to cancel order");
 
-  /* PRICE FORMAT */
+}
 
-  const formatINR = value =>
-    value.toLocaleString("en-IN",{
-      style:"currency",
-      currency:"INR"
-    });
+};
 
 
-  if(loading){
-    return <p style={{textAlign:"center"}}>Loading orders...</p>;
-  }
+/* PRICE FORMAT */
 
+const formatINR = value =>
+value.toLocaleString("en-IN",{
+style:"currency",
+currency:"INR"
+});
 
-  /* HIDE DELIVERED ORDERS */
 
-  const activeOrders = orders.filter(
-    order => order.status !== "Delivered"
-  );
+if(loading){
+return <p style={{textAlign:"center"}}>Loading orders...</p>;
+}
 
 
-  return(
-    <>
-      <Header/>
+/* ACTIVE ORDERS */
 
-      <section className="orders-page">
+const activeOrders = orders.filter(
+order => order.status !== "Delivered"
+);
 
-        <h1>My Orders</h1>
 
-        {activeOrders.length === 0 && (
-          <p>No orders yet</p>
-        )}
+return(
 
+<>
+<Header/>
 
-        {activeOrders.map(order=>{
+<section className="orders-page">
 
-          const currentIndex =
-            statusSteps.indexOf(order.status || "Placed");
+<h1>My Orders</h1>
 
-          const progress =
-            (currentIndex/(statusSteps.length-1))*100;
+{activeOrders.length === 0 && (
+<p>No active orders</p>
+)}
 
 
-          return(
+{activeOrders.map(order=>{
 
-            <div
-              key={order._id}
-              className="order-card"
-              onClick={() => navigate(`/orders/${order._id}`)}
-            >
+const currentIndex =
+statusSteps.indexOf(order.status || "Placed");
 
-              {/* ORDER HEADER */}
+const progress =
+(currentIndex/(statusSteps.length-1))*100;
 
-              <div className="order-header">
 
-                <p>
-                  <b>Order ID:</b> {order._id}
-                </p>
+return(
 
-                <p>
-                  Date: {new Date(order.createdAt)
-                    .toLocaleDateString()}
-                </p>
+<div
+key={order._id}
+className="order-card"
+onClick={()=>navigate(`/order/${order._id}`)}
+>
 
-              </div>
+<div className="order-header">
 
+<p>
+<b>Order ID:</b> {order._id}
+</p>
 
-              {/* PRODUCTS */}
+<p>
+Date: {new Date(order.createdAt).toLocaleDateString()}
+</p>
 
-              {order.products.map(item=>(
+</div>
 
-                <div
-                  key={item._id}
-                  className="order-product"
-                >
 
-                  <img
-                    src={item.productId?.image}
-                    alt={item.productId?.name}
-                  />
+{order.products.map(item=>(
 
-                  <div>
+<div
+key={item._id}
+className="order-product"
+>
 
-                    <p className="product-name">
-                      {item.productId?.name}
-                    </p>
+<img
+src={item.productId?.image}
+alt={item.productId?.name}
+/>
 
-                    <p>
-                      Quantity: {item.quantity}
-                    </p>
+<div>
 
-                  </div>
+<p className="product-name">
+{item.productId?.name}
+</p>
 
-                </div>
+<p>
+Quantity: {item.quantity}
+</p>
 
-              ))}
+</div>
 
+</div>
 
-              {/* TOTAL */}
+))}
 
-              <p className="order-total">
-                Total: {formatINR(order.total)}
-              </p>
 
+<p className="order-total">
+Total: {formatINR(order.total)}
+</p>
 
-              {/* DELIVERY DATE */}
 
-              <p className="delivery-date">
+<p className="delivery-date">
 
-                Estimated Delivery:
+Estimated Delivery:
 
-                {new Date(
-                  new Date(order.createdAt).getTime()
-                  + 5*24*60*60*1000
-                ).toLocaleDateString()}
+{new Date(
+new Date(order.createdAt).getTime()
++ 5*24*60*60*1000
+).toLocaleDateString()}
 
-              </p>
+</p>
 
 
-              {/* TRACKER */}
+<div
+className="tracker-container"
+style={{ "--progress":`${progress}%` }}
+>
 
-              <div
-                className="tracker-container"
-                style={{
-                  "--progress":`${progress}%`
-                }}
-              >
+{statusSteps.map((step,index)=>(
 
-                {statusSteps.map((step,index)=>(
+<div
+key={step}
+className={
+index <= currentIndex
+? "tracker-step active"
+: "tracker-step"
+}
+>
 
-                  <div
-                    key={step}
-                    className={
-                      index <= currentIndex
-                        ? "tracker-step active"
-                        : "tracker-step"
-                    }
-                  >
+<div className="circle"></div>
 
-                    <div className="circle"></div>
+<p>{step}</p>
 
-                    <p>{step}</p>
+</div>
 
-                  </div>
+))}
 
-                ))}
+</div>
 
-              </div>
 
+<div className="tracking-info">
 
-              {/* TRACKING INFO */}
+<p>
+<b>Courier:</b> {order.courier}
+</p>
 
-              <div className="tracking-info">
+<p>
+<b>Tracking ID:</b> {order.trackingId}
+</p>
 
-                <p>
-                  <b>Courier:</b> {order.courier}
-                </p>
+</div>
 
-                <p>
-                  <b>Tracking ID:</b> {order.trackingId}
-                </p>
 
-              </div>
+<div className="timeline">
 
+<h4>Delivery Updates</h4>
 
-              {/* TIMELINE */}
+{order.timeline?.map((item,index)=>(
 
-              <div className="timeline">
+<div
+key={index}
+className="timeline-item"
+>
 
-                <h4>Delivery Updates</h4>
+<div className="timeline-dot"></div>
 
-                {order.timeline?.map((item,index)=>(
+<div>
 
-                  <div
-                    key={index}
-                    className="timeline-item"
-                  >
+<p>{item.step}</p>
 
-                    <div className="timeline-dot"></div>
+<span>
+{new Date(item.date).toLocaleString()}
+</span>
 
-                    <div>
+</div>
 
-                      <p>{item.step}</p>
+</div>
 
-                      <span>
-                        {new Date(item.date)
-                          .toLocaleString()}
-                      </span>
+))}
 
-                    </div>
+</div>
 
-                  </div>
 
-                ))}
+{(order.status || "Placed") === "Placed" && (
 
-              </div>
+<div className="order-actions">
 
+<button
+className="cancel-btn"
+onClick={(e)=>cancelOrder(order._id,e)}
+>
+Cancel Order
+</button>
 
-              {/* CANCEL BUTTON */}
+</div>
 
-              {(order.status || "Placed") === "Placed" && (
+)}
 
-                <div className="order-actions">
+</div>
 
-                  <button
-                    className="cancel-btn"
-                    onClick={(e)=>
-                      cancelOrder(order._id,e)
-                    }
-                  >
-                    Cancel Order
-                  </button>
+);
 
-                </div>
+})}
 
-              )}
+</section>
 
-            </div>
+<Footer/>
 
-          )
+</>
 
-        })}
-
-      </section>
-
-      <Footer/>
-
-    </>
-  );
+);
 
 }
 

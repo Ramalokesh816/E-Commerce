@@ -1,89 +1,152 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 import "./OrderHistory.css";
 
-function OrderHistory() {
+function OrderHistory(){
 
-  const [orders,setOrders] = useState([]);
+const [orders,setOrders] = useState([]);
 
-  const userId = localStorage.getItem("userId");
+const userId = localStorage.getItem("userId");
 
-  useEffect(()=>{
+const navigate = useNavigate();
 
-    const fetchOrders = async ()=>{
+useEffect(()=>{
 
-      try{
+const fetchOrders = async ()=>{
 
-        const res = await axios.get(
-          `http://localhost:5000/api/orders/${userId}`
-        );
+try{
 
-        setOrders(res.data);
+const res = await axios.get(
+`http://localhost:5000/api/orders/${userId}`
+);
 
-      }catch(error){
+/* SHOW ONLY DELIVERED ORDERS */
 
-        console.error(error);
+const deliveredOrders = res.data.filter(
+order => order.status === "Delivered"
+);
 
-      }
+setOrders(deliveredOrders);
 
-    };
+}catch(error){
 
-    fetchOrders();
+console.error(error);
 
-  },[userId]);
+}
 
-  const formatINR = (v)=>
-    v.toLocaleString("en-IN",{style:"currency",currency:"INR"});
+};
 
-  return(
-    <>
-      <Header/>
+fetchOrders();
 
-      <section className="orders-page">
+},[userId]);
 
-        <h1>My Orders</h1>
 
-        {orders.length===0 && (
-          <p>No orders placed yet</p>
-        )}
+const formatINR = v =>
+v.toLocaleString("en-IN",{
+style:"currency",
+currency:"INR"
+});
 
-        {orders.map(order=>(
 
-          <div key={order._id} className="order-card">
+return(
 
-            <h3>Order ID: {order._id}</h3>
+<>
+<Header/>
 
-            {order.products.map(item=>(
+<section className="orders-page">
 
-              <div key={item._id} className="order-item">
+<h1>Order History</h1>
 
-                <span>
-                  {item.productId.name} × {item.quantity}
-                </span>
+{orders.length===0 && (
 
-                <span>
-                  {formatINR(item.productId.price * item.quantity)}
-                </span>
+<p className="empty">
+No delivered orders yet
+</p>
 
-              </div>
+)}
 
-            ))}
+{orders.map(order=>(
 
-            <h4>Total: {formatINR(order.total)}</h4>
+<div key={order._id} className="order-card">
 
-          </div>
+<div className="order-header">
 
-        ))}
+<span>
+Order ID: {order._id}
+</span>
 
-      </section>
+<span className="status delivered">
+Delivered
+</span>
 
-      <Footer/>
-    </>
-  );
+</div>
+
+
+<p className="date">
+
+Date: {new Date(order.createdAt).toLocaleDateString()}
+
+</p>
+
+
+{order.products.map(item=>(
+
+<div key={item._id} className="order-item">
+
+<img
+src={item.productId.image}
+alt={item.productId.name}
+/>
+
+<div className="product-info">
+
+<h4>{item.productId.name}</h4>
+
+<p>Quantity: {item.quantity}</p>
+
+</div>
+
+<div className="price">
+
+{formatINR(item.productId.price * item.quantity)}
+
+</div>
+
+</div>
+
+))}
+
+
+<div className="order-footer">
+
+<h3>Total: {formatINR(order.total)}</h3>
+
+<button
+className="details-btn"
+onClick={()=>navigate(`/order/${order._id}`)}
+>
+
+View Details
+
+</button>
+
+</div>
+
+</div>
+
+))}
+
+</section>
+
+<Footer/>
+</>
+
+);
 
 }
 

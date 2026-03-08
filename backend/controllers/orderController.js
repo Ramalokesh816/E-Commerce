@@ -1,15 +1,33 @@
 const Order = require("../models/Order");
 
+const calculateStatus = (createdAt) => {
 
-/* =========================
-   PLACE ORDER
-========================= */
+  const now = new Date();
+  const created = new Date(createdAt);
+
+  const diffDays = Math.floor(
+    (now - created) / (1000 * 60 * 60 * 24)
+  );
+
+  let status = "Placed";
+
+  if (diffDays >= 2) status = "Packed";
+  if (diffDays >= 3) status = "Shipped";
+  if (diffDays >= 4) status = "Out for Delivery";
+  if (diffDays >= 5) status = "Delivered";
+
+  return status;
+};
+
+
+
+/* PLACE ORDER */
 
 const placeOrder = async (req,res)=>{
 
   try{
 
-    const { userId, products, total, address } = req.body;
+    const { userId,products,total,address } = req.body;
 
     const order = new Order({
 
@@ -52,9 +70,7 @@ const placeOrder = async (req,res)=>{
 
 
 
-/* =========================
-   GET USER ORDERS
-========================= */
+/* GET USER ORDERS */
 
 const getUserOrders = async (req,res)=>{
 
@@ -66,21 +82,9 @@ const getUserOrders = async (req,res)=>{
     .populate("products.productId")
     .sort({createdAt:-1});
 
-    const now = new Date();
-
     const updatedOrders = orders.map(order=>{
 
-      const created = new Date(order.createdAt);
-
-      const diffDays =
-        Math.floor((now - created) / (1000*60*60*24));
-
-      let status = "Placed";
-
-      if(diffDays >= 2) status = "Packed";
-      if(diffDays >= 3) status = "Shipped";
-      if(diffDays >= 5) status = "Out for Delivery";
-      if(diffDays >= 6) status = "Delivered";
+      const status = calculateStatus(order.createdAt);
 
       return {
         ...order._doc,
@@ -103,9 +107,7 @@ const getUserOrders = async (req,res)=>{
 
 
 
-/* =========================
-   GET ORDER BY ID
-========================= */
+/* GET ORDER BY ID */
 
 const getOrderById = async (req,res)=>{
 
@@ -123,7 +125,12 @@ const getOrderById = async (req,res)=>{
 
     }
 
-    res.json(order);
+    const status = calculateStatus(order.createdAt);
+
+    res.json({
+      ...order._doc,
+      status
+    });
 
   }catch(error){
 
@@ -137,9 +144,7 @@ const getOrderById = async (req,res)=>{
 
 
 
-/* =========================
-   UPDATE ORDER STATUS
-========================= */
+/* UPDATE ORDER STATUS */
 
 const updateOrderStatus = async (req,res)=>{
 
@@ -183,30 +188,30 @@ const updateOrderStatus = async (req,res)=>{
 
 
 
-/* =========================
-   CANCEL ORDER
-========================= */
+/* CANCEL ORDER */
 
-const cancelOrder = async (req, res) => {
+const cancelOrder = async (req,res)=>{
 
-  try {
+  try{
 
     const order = await Order.findByIdAndDelete(req.params.id);
 
-    if (!order) {
+    if(!order){
+
       return res.status(404).json({
-        message: "Order not found"
+        message:"Order not found"
       });
+
     }
 
     res.json({
-      message: "Order cancelled successfully"
+      message:"Order cancelled successfully"
     });
 
-  } catch (error) {
+  }catch(error){
 
     res.status(500).json({
-      message: "Error cancelling order"
+      message:"Error cancelling order"
     });
 
   }
@@ -214,12 +219,10 @@ const cancelOrder = async (req, res) => {
 };
 
 
-module.exports = {
-
+module.exports={
   placeOrder,
   getUserOrders,
   getOrderById,
   updateOrderStatus,
   cancelOrder
-
 };

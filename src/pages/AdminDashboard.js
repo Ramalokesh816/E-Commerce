@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
 import "./AdminDashboard.css";
 function AdminDashboard() {
 
@@ -39,7 +40,7 @@ function AdminDashboard() {
   return (
 
     <div >
-
+       
       <h2>Admin Dashboard</h2>
 
       <button onClick={() => navigate("/admin/add-product")}>

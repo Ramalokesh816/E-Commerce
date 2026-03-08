@@ -9,214 +9,191 @@ import "./OrderDetails.css";
 
 function OrderDetails(){
 
-  const { id } = useParams();
+const { id } = useParams();
 
-  const [order,setOrder] = useState(null);
+const [order,setOrder] = useState(null);
 
-  const statusSteps=[
-    "Placed",
-    "Packed",
-    "Shipped",
-    "Out for Delivery",
-    "Delivered"
-  ];
+const statusSteps=[
+"Placed",
+"Packed",
+"Shipped",
+"Out for Delivery",
+"Delivered"
+];
 
-  useEffect(()=>{
+useEffect(()=>{
 
-    const fetchOrder = async()=>{
+const fetchOrder = async()=>{
 
-      try{
+try{
 
-        const res = await axios.get(
-          `http://localhost:5000/api/orders/details/${id}`
-        );
+const res = await axios.get(
+`http://localhost:5000/api/orders/details/${id}`
+);
 
-        setOrder(res.data);
+setOrder(res.data);
 
-      }catch(error){
+}catch(err){
+console.log(err);
+}
 
-        console.error(error);
+};
 
-      }
+fetchOrder();
 
-    };
+},[id]);
 
-    fetchOrder();
+if(!order) return <p className="loading">Loading...</p>;
 
-  },[id]);
+const currentIndex =
+statusSteps.indexOf(order.status || "Placed");
 
+const progress =
+(currentIndex/(statusSteps.length-1))*100;
 
-  if(!order) return <p>Loading...</p>;
+const orderDate = new Date(order.createdAt);
 
+const deliveryDate = new Date(orderDate);
+deliveryDate.setDate(orderDate.getDate()+5);
 
-  const currentIndex =
-    statusSteps.indexOf(order.status || "Placed");
+const timelineDates={
 
+Placed:new Date(orderDate),
 
-  const progress =
-    (currentIndex/(statusSteps.length-1))*100;
+Packed:new Date(orderDate),
 
+Shipped:new Date(orderDate),
 
-  const formatINR = value =>
-    value.toLocaleString("en-IN",{
-      style:"currency",
-      currency:"INR"
-    });
+"Out for Delivery":new Date(orderDate),
 
+Delivered:new Date(orderDate)
 
-  return(
-    <>
-      <Header/>
+};
 
-      <section className="order-details">
+timelineDates.Packed.setDate(orderDate.getDate()+2);
+timelineDates.Shipped.setDate(orderDate.getDate()+3);
+timelineDates["Out for Delivery"].setDate(orderDate.getDate()+4);
+timelineDates.Delivered.setDate(orderDate.getDate()+5);
 
-        <h1>Order Details</h1>
+const formatINR=value=>
+value.toLocaleString("en-IN",{
+style:"currency",
+currency:"INR"
+});
 
-        <div className="details-card">
+return(
 
-          <p><b>Order ID:</b> {order._id}</p>
+<>
+<Header/>
 
-          <p>
-            Date:
-            {new Date(order.createdAt)
-            .toLocaleDateString()}
-          </p>
+<section className="order-details">
 
+<h1>Order Tracking</h1>
 
-          {/* TRACKER */}
+<div className="details-card">
 
-          <div
-            className="tracker-container"
-            style={{"--progress":`${progress}%`}}
-          >
+<div className="order-meta">
 
-            {statusSteps.map((step,index)=>(
+<p><b>Order ID:</b> {order._id}</p>
+<p><b>Date:</b> {orderDate.toLocaleDateString()}</p>
+<p><b>Estimated Delivery:</b> {deliveryDate.toLocaleDateString()}</p>
 
-              <div
-                key={step}
-                className={
-                  index <= currentIndex
-                  ? "tracker-step active"
-                  : "tracker-step"
-                }
-              >
+</div>
 
-                <div className="circle"></div>
+{/* TRACKER */}
 
-                <p>{step}</p>
+<div className="tracker">
 
-              </div>
+<div className="road"></div>
 
-            ))}
+<div
+className="progress"
+style={{width:`${progress}%`}}
+></div>
 
-          </div>
+<div
+className="truck-container"
+style={{left:`${progress}%`}}
+>
 
+<div className="truck">
 
-          {/* PRODUCTS */}
+<div className="truck-body"></div>
 
-          {order.products.map(item=>(
+<div className="wheel wheel1"></div>
+<div className="wheel wheel2"></div>
 
-            <div
-              key={item._id}
-              className="order-product"
-            >
+</div>
 
-              <img
-                src={item.productId?.image}
-                alt={item.productId?.name}
-              />
+</div>
 
-              <div>
+<div className="steps">
 
-                <h4>{item.productId?.name}</h4>
+{statusSteps.map((step,index)=>(
 
-                <p>Quantity: {item.quantity}</p>
+<div
+key={step}
+className={`step ${index<=currentIndex ? "active" : ""}`}
+>
 
-              </div>
+<div className="circle"></div>
 
-            </div>
+<p>{step}</p>
 
-          ))}
+<span>
+{timelineDates[step].toLocaleDateString()}
+</span>
 
+</div>
 
-          <h3>Total: {formatINR(order.total)}</h3>
+))}
 
+</div>
 
-          {/* ADDRESS */}
-
-          {/* Wrap these sections inside your details-card */}
-<div className="summary-grid">
-  <div className="address">
-    <h4>Shipping Address</h4>
-    <p>{order.address.name}</p>
-    <p>{order.address.street}</p>
-    <p>{order.address.city}, {order.address.pincode}</p>
-    <p>{order.address.phone}</p>
-  </div>
-
-  <div className="tracking-info">
-    <p><b>Courier:</b> {order.courier}</p>
-    <p><b>Tracking ID:</b> {order.trackingId}</p>
-  </div>
-
-  <div className="total-section">
-    <h3>Total: {formatINR(order.total)}</h3>
-  </div>
 </div>
 
 
-          {/* COURIER */}
+{/* PRODUCTS */}
 
-          <div className="tracking-info">
+<div className="product-section">
 
-            <p><b>Courier:</b> {order.courier}</p>
+{order.products.map(item=>(
 
-            <p>
-              <b>Tracking ID:</b> {order.trackingId}
-            </p>
+<div
+key={item._id}
+className="order-product"
+>
 
-          </div>
+<img
+src={item.productId?.image}
+alt={item.productId?.name}
+/>
 
+<div>
 
-          {/* TIMELINE */}
+<h4>{item.productId?.name}</h4>
+<p>Quantity: {item.quantity}</p>
 
-          <div className="timeline">
+</div>
 
-            <h4>Delivery Updates</h4>
+</div>
 
-            {order.timeline?.map((item,index)=>(
+))}
 
-              <div
-                key={index}
-                className="timeline-item"
-              >
+<h3>Total: {formatINR(order.total)}</h3>
 
-                <div className="timeline-dot"></div>
+</div>
 
-                <div>
+</div>
 
-                  <p>{item.step}</p>
+</section>
 
-                  <span>
-                    {new Date(item.date)
-                    .toLocaleString()}
-                  </span>
+<Footer/>
 
-                </div>
+</>
 
-              </div>
+);
 
-            ))}
-
-          </div>
-
-        </div>
-
-      </section>
-
-      <Footer/>
-    </>
-  );
 }
 
 export default OrderDetails;
