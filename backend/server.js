@@ -22,7 +22,7 @@ const app = express();
 
 /* Allow frontend to access backend */
 app.use(cors({
-  origin: "*",
+  origin: "https://e-commerce-2-y2k1.onrender.com",
   methods: ["GET","POST","PUT","DELETE"],
   credentials: true
 }));
