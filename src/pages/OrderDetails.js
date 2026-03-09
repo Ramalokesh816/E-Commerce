@@ -28,7 +28,7 @@ const fetchOrder = async()=>{
 try{
 
 const res = await axios.get(
-`http://localhost:5000/api/orders/details/${id}`
+`https://e-commerce-1-ifvn.onrender.com/api/orders/details/${id}`
 );
 
 setOrder(res.data);

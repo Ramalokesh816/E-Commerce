@@ -48,7 +48,7 @@ function AddProduct() {
     try {
 
       await axios.post(
-        "http://localhost:5000/api/products",
+        "https://e-commerce-1-ifvn.onrender.com",
         product
       );
 

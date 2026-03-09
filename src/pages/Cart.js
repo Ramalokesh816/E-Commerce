@@ -40,7 +40,7 @@ function Cart() {
       try {
 
         const res = await axios.get(
-          `http://localhost:5000/api/cart/${userId}`
+          `https://e-commerce-1-ifvn.onrender.com/api/cart/${userId}`
         );
 
         setCartItems(res.data);
@@ -65,7 +65,7 @@ function Cart() {
     try {
 
       await axios.delete(
-        `http://localhost:5000/api/cart/remove/${id}`
+        `https://e-commerce-1-ifvn.onrender.com/api/cart/remove/${id}`
       );
 
       setCartItems(
@@ -90,7 +90,7 @@ function Cart() {
     try {
 
       await axios.put(
-        `http://localhost:5000/api/cart/update/${id}`,
+        `https://e-commerce-1-ifvn.onrender.com/api/cart/update/${id}`,
         { quantity: qty }
       );
 

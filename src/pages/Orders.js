@@ -24,7 +24,6 @@ const statusSteps = [
 "Delivered"
 ];
 
-
 /* FETCH ORDERS */
 
 useEffect(()=>{
@@ -34,7 +33,7 @@ const fetchOrders = async ()=>{
 try{
 
 const res = await axios.get(
-`http://localhost:5000/api/orders/${userId}`
+`https://e-commerce-1-ifvn.onrender.com/api/orders/${userId}`
 );
 
 setOrders(res.data);
@@ -73,7 +72,7 @@ e.stopPropagation();
 try{
 
 await axios.delete(
-`http://localhost:5000/api/orders/cancel/${orderId}`
+`https://e-commerce-1-ifvn.onrender.com/api/orders/cancel/${orderId}`
 );
 
 setOrders(prev =>
@@ -117,7 +116,9 @@ return(
 
 <>
 <Header/>
+
 <div className="orders-page">
+
 <section className="orders-container">
 
 <h1>My Orders</h1>
@@ -295,6 +296,7 @@ Cancel Order
 })}
 
 </section>
+
 </div>
 
 <Footer/>

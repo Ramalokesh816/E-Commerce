@@ -28,7 +28,7 @@ function EditProduct() {
       try{
 
         const res = await axios.get(
-          `http://localhost:5000/api/products/${id}`
+          `https://e-commerce-1-ifvn.onrender.com/api/products/${id}`
         );
 
         setProduct(res.data);
@@ -61,7 +61,7 @@ function EditProduct() {
     try{
 
       await axios.put(
-        `http://localhost:5000/api/products/${id}`,
+        `https://e-commerce-1-ifvn.onrender.com/api/products/${id}`,
         product
       );
 

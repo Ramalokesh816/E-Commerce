@@ -19,13 +19,20 @@ connectDB();
 const app = express();
 
 /* MIDDLEWARE */
-app.use(cors());
+
+/* Allow frontend to access backend */
+app.use(cors({
+  origin: "*",
+  methods: ["GET","POST","PUT","DELETE"],
+  credentials: true
+}));
 
 /* FIX PAYLOAD TOO LARGE ERROR */
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 /* ROUTES */
+
 app.use("/api/products", productRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/users", userRoutes);
@@ -34,11 +41,13 @@ app.use("/api/address", addressRoutes);
 app.use("/api/orders", orderRoutes);
 
 /* TEST ROUTE */
+
 app.get("/", (req, res) => {
   res.send("Backend API Running");
 });
 
 /* SERVER PORT */
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

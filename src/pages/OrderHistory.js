@@ -22,7 +22,7 @@ const fetchOrders = async ()=>{
 try{
 
 const res = await axios.get(
-`http://localhost:5000/api/orders/${userId}`
+`https://e-commerce-1-ifvn.onrender.com/api/orders/${userId}`
 );
 
 /* SHOW ONLY DELIVERED ORDERS */

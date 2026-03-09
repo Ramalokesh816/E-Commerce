@@ -31,7 +31,7 @@ function AdminDashboard() {
 
     try {
 
-      const res = await axios.get("http://localhost:5000/api/products");
+      const res = await axios.get("https://e-commerce-1-ifvn.onrender.com");
 
       setProducts(res.data);
 
@@ -48,7 +48,7 @@ function AdminDashboard() {
 
     try {
 
-      await axios.delete(`http://localhost:5000/api/products/${id}`);
+      await axios.delete(`https://e-commerce-1-ifvn.onrender.com/api/products/${id}`);
 
       fetchProducts();
 

@@ -30,7 +30,7 @@ function Profile() {
   /* FETCH USER */
   const fetchUser = async (id) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/users/${id}`);
+      const res = await axios.get(`https://e-commerce-1-ifvn.onrender.com/api/users/${id}`);
       setUserName(res.data.name);
       setProfileImage(res.data.profileImage);
     } catch (error) {
@@ -50,7 +50,7 @@ function Profile() {
 
         try {
           const res = await axios.put(
-            `http://localhost:5000/api/users/profile-image/${userId}`,
+            `https://e-commerce-1-ifvn.onrender.com/api/users/profile-image/${userId}`,
             { image: base64Image }
           );
 

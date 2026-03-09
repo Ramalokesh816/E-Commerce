@@ -33,7 +33,7 @@ function Shop() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/products");
+        const res = await axios.get("https://e-commerce-1-ifvn.onrender.com/api/products");
         setProducts(res.data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -83,7 +83,7 @@ function Shop() {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/cart/add", {
+      await axios.post("https://e-commerce-1-ifvn.onrender.com/api/cart/add", {
         userId: userId,
         productId: productId,
         quantity: 1

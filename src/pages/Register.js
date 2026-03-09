@@ -47,7 +47,7 @@ function Register() {
       setError("");
 
       await axios.post(
-        "http://localhost:5000/api/users/register",
+        "https://e-commerce-1-ifvn.onrender.com/api/users/register",
         {
           name,
           email,

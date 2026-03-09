@@ -21,7 +21,7 @@ export const CartProvider = ({ children }) => {
     try {
 
       const res = await axios.get(
-        `http://localhost:5000/api/cart/${userId}`
+        `https://e-commerce-1-ifvn.onrender.com/api/cart/${userId}`
       );
 
       setCart(res.data.items || []);

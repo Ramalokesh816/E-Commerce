@@ -42,7 +42,7 @@ function Checkout() {
       /* GET CART */
 
       const cartRes = await axios.get(
-        `http://localhost:5000/api/cart/${userId}`
+        `https://e-commerce-1-ifvn.onrender.com/api/cart/${userId}`
       );
 
       const cart = cartRes.data;
@@ -72,7 +72,7 @@ function Checkout() {
       /* PLACE ORDER */
 
       await axios.post(
-        "http://localhost:5000/api/orders/place",
+        "https://e-commerce-1-ifvn.onrender.com/api/orders/place",
         {
           userId,
           products,
@@ -84,7 +84,7 @@ function Checkout() {
       /* CLEAR CART */
 
       await axios.delete(
-        `http://localhost:5000/api/cart/clear/${userId}`
+        `https://e-commerce-1-ifvn.onrender.com/api/cart/clear/${userId}`
       );
 
       /* REDIRECT TO SUCCESS PAGE */
