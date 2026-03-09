@@ -1,6 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
 import "./AdminLogin.css";
 
 function AdminLogin() {
@@ -26,37 +30,54 @@ function AdminLogin() {
       navigate("/admin/dashboard");
 
     } catch (error) {
+
       alert("Invalid Login");
+
     }
+
   };
 
   return (
 
-    <div >
+    <>
+      <Header/>
 
-      <h2>Admin Login</h2>
+      <section className="admin-login-page">
 
-      <form onSubmit={handleLogin}>
+        <div className="admin-login-card">
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e)=>setEmail(e.target.value)}
-        />
+          <h2>Admin Login</h2>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e)=>setPassword(e.target.value)}
-        />
+          <form onSubmit={handleLogin}>
 
-        <button type="submit">Login</button>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e)=>setEmail(e.target.value)}
+              required
+            />
 
-      </form>
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e)=>setPassword(e.target.value)}
+              required
+            />
 
-    </div>
+            <button type="submit">
+              Login
+            </button>
+
+          </form>
+
+        </div>
+
+      </section>
+
+      <Footer/>
+    </>
   );
 }
 

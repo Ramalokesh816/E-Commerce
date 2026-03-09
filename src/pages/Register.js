@@ -1,6 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
 import "./Auth.css";
 
 function Register() {
@@ -16,13 +20,11 @@ function Register() {
 
     e.preventDefault();
 
-    /* NAME VALIDATION */
     if(name.trim().length < 3){
       setError("Name must be at least 3 characters");
       return;
     }
 
-    /* EMAIL VALIDATION */
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if(!emailPattern.test(email)){
@@ -30,7 +32,6 @@ function Register() {
       return;
     }
 
-    /* PASSWORD VALIDATION */
     const passwordPattern =
       /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{6,}$/;
 
@@ -71,22 +72,30 @@ function Register() {
 
   return (
 
+    <>
+    
+    <Header/>
+
     <div className="auth-container">
 
       <div className="auth-left">
+
         <img
-          src="https://images.unsplash.com/photo-1601597111158-2fceff292cdc"
-          alt="Supermarket"
+          src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a"
+          alt="Ecommerce"
         />
+
       </div>
 
       <div className="auth-right">
+
+        <div className="auth-card">
 
         <h2>Create Account</h2>
         <p>Join our marketplace</p>
 
         {error && (
-          <p style={{color:"red",marginBottom:"10px"}}>
+          <p className="error-text">
             {error}
           </p>
         )}
@@ -123,9 +132,22 @@ function Register() {
 
         </form>
 
+        {/* LOGIN LINK */}
+
+        <div className="auth-switch">
+        Already have an account? 
+        <Link to="/login"> Login</Link>
+        </div>
+
+        </div>
+
       </div>
 
     </div>
+
+    <Footer/>
+
+    </>
 
   );
 }

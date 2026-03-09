@@ -1,109 +1,70 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext"; // Integrated
+import { useAuth } from "../context/AuthContext";
 import "./Header.css";
 
 function Header() {
-
   const navigate = useNavigate();
   const { cart } = useCart();
-  const { user } = useAuth(); // Using user from Context instead of raw localStorage
-
+  const { user } = useAuth(); 
   const [menuOpen, setMenuOpen] = useState(false);
-
-  /* THE LOGIC: If user exists in Context, show Profile/Cart. Otherwise, show Login/Register */
 
   return (
     <header className="header">
-
       {/* LOGO */}
-      <div
-        className="logo"
-        onClick={() => navigate("/")}
-      >
+      <div className="logo" onClick={() => navigate("/")}>
         🛍️ ShopEase
       </div>
 
-      {/* NAVIGATION */}
+      {/* NAVIGATION - Common for both states */}
       <nav className={`nav ${menuOpen ? "open" : ""}`}>
-
-        <Link to="/" onClick={() => setMenuOpen(false)}>
-          Home
-        </Link>
-
-        <Link to="/shop" onClick={() => setMenuOpen(false)}>
-          Shop
-        </Link>
-
-        <Link to="/categories" onClick={() => setMenuOpen(false)}>
-          Categories
-        </Link>
-
-        <Link to="/deals" onClick={() => setMenuOpen(false)}>
-          Deals
-        </Link>
-
+        <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+        <Link to="/shop" onClick={() => setMenuOpen(false)}>Shop</Link>
+        <Link to="/categories" onClick={() => setMenuOpen(false)}>Categories</Link>
+        <Link to="/deals" onClick={() => setMenuOpen(false)}>Deals</Link>
       </nav>
 
-      {/* RIGHT SIDE */}
+      {/* RIGHT SIDE ACTIONS */}
       <div className="header-actions">
-
         {user ? (
-
           <>
-            {/* PROFILE */}
-            <div
-              className="profile-icon"
+            {/* LOGGED IN VIEW: Only Profile and Cart */}
+            <div 
+              className="profile-icon" 
               onClick={() => navigate("/profile")}
+              title="View Profile"
             >
-              👤 
+              👤
             </div>
 
-            {/* CART */}
-            <div
-              className="cart-link"
+            <div 
+              className="cart-link" 
               onClick={() => navigate("/cart")}
             >
               🛒 
               {cart.length > 0 && (
-                <span className="cart-badge">
-                  {cart.length}
-                </span>
+                <span className="cart-badge">{cart.length}</span>
               )}
             </div>
           </>
-
         ) : (
-
           <>
-            <Link
-              to="/login"
-              className="auth-link"
-            >
+            {/* LOGGED OUT VIEW: Only Login and Register */}
+            <Link to="/login" className="auth-link">
               Login
             </Link>
-
-            <Link
-              to="/register"
-              className="auth-link register"
-            >
+            <Link to="/register" className="auth-link register">
               Register
             </Link>
           </>
-
         )}
 
-        {/* HAMBURGER */}
-        <div
-          className="hamburger"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
+        {/* HAMBURGER MENU FOR MOBILE */}
+        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
           ☰
         </div>
-
       </div>
-
     </header>
   );
 }

@@ -1,106 +1,207 @@
-/* PAGE BACKGROUND */
-body {
-  font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, #f5f7ff, #eef2ff);
+/* =========================
+PAGE BACKGROUND
+========================= */
+
+.edit-page{
+
+min-height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+padding:40px 20px;
+
+background:linear-gradient(-45deg,#00c6ff,#275b9b,#11cb9c,#c60606,#43e97b,#38f9d7);
+background-size:400% 400%;
+
+animation:bgMove 16s ease infinite;
+
 }
 
-/* CONTAINER */
-.edit-product-container {
-  max-width: 600px;
-  margin: 60px auto;
-  padding: 40px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  animation: slideFade 0.6s ease;
+
+/* =========================
+FORM CONTAINER
+========================= */
+
+.edit-container{
+
+width:100%;
+
+max-width:520px;
+
+background:rgb(200, 219, 31);
+
+padding:35px;
+
+border-radius:18px;
+
+box-shadow:0 15px 40px rgba(0,0,0,0.25);
+
+animation:fadeUp .8s ease;
+
 }
+
 
 /* TITLE */
-.edit-product-container h2 {
-  text-align: center;
-  margin-bottom: 25px;
-  color: #222;
-  font-weight: 600;
+
+.edit-container h2{
+
+text-align:center;
+
+margin-bottom:25px;
+
+font-size:28px;
+
+color:#1f2937;
+
 }
 
-/* FORM */
-.edit-product-form {
-  display: flex;
-  flex-direction: column;
+
+/* =========================
+FORM INPUTS
+========================= */
+
+.edit-container input,
+.edit-container textarea{
+
+width:100%;
+
+padding:12px 14px;
+
+margin-bottom:16px;
+
+border-radius:10px;
+
+border:1px solid #26c1df;
+
+font-size:14px;
+
+outline:none;
+
+transition:.3s;
+
 }
 
-/* INPUTS */
-.edit-product-form input,
-.edit-product-form textarea {
-  padding: 12px 14px;
-  margin-bottom: 18px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 15px;
-  outline: none;
-  transition: all 0.3s ease;
-}
 
 /* INPUT FOCUS */
-.edit-product-form input:focus,
-.edit-product-form textarea:focus {
-  border-color: #4a7cff;
-  box-shadow: 0 0 6px rgba(74,124,255,0.3);
-  transform: scale(1.02);
+
+.edit-container input:focus,
+.edit-container textarea:focus{
+
+border-color:#4a6cf7;
+
+box-shadow:0 0 6px rgba(74,108,247,.5);
+
 }
+
 
 /* TEXTAREA */
-.edit-product-form textarea {
-  resize: none;
-  height: 90px;
+
+.edit-container textarea{
+
+height:90px;
+
+resize:none;
+
 }
 
-/* BUTTON */
-.edit-product-form button {
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #4a7cff, #6a5cff);
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+
+/* =========================
+BUTTON
+========================= */
+
+.update-btn{
+
+width:100%;
+
+padding:12px;
+
+border:none;
+
+border-radius:10px;
+
+background:linear-gradient(135deg,#4a6cf7,#7b91ff);
+
+color:white;
+
+font-size:15px;
+
+cursor:pointer;
+
+transition:.3s;
+
 }
 
-/* BUTTON HOVER */
-.edit-product-form button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(74,124,255,0.35);
+.update-btn:hover{
+
+transform:scale(1.05);
+
+box-shadow:0 8px 20px rgba(74,108,247,.5);
+
 }
 
-/* BUTTON CLICK */
-.edit-product-form button:active {
-  transform: scale(0.97);
+
+/* =========================
+ANIMATIONS
+========================= */
+
+@keyframes bgMove{
+
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+
 }
 
-/* ANIMATION */
-@keyframes slideFade {
-  from {
-    opacity: 0;
-    transform: translateY(35px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(40px);
 }
 
-/* MOBILE */
-@media (max-width: 768px) {
+to{
+opacity:1;
+transform:translateY(0);
+}
 
-  .edit-product-container {
-    margin: 20px;
-    padding: 25px;
-  }
+}
 
-  .edit-product-form input,
-  .edit-product-form textarea {
-    font-size: 14px;
-  }
+
+/* =========================
+TABLET
+========================= */
+
+@media(max-width:768px){
+
+.edit-container{
+
+padding:28px;
+
+}
+
+}
+
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:480px){
+
+.edit-container{
+
+padding:22px;
+
+}
+
+.edit-container h2{
+
+font-size:24px;
+
+}
 
 }

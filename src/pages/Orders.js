@@ -117,8 +117,8 @@ return(
 
 <>
 <Header/>
-
-<section className="orders-page">
+<div className="orders-page">
+<section className="orders-container">
 
 <h1>My Orders</h1>
 
@@ -295,6 +295,7 @@ Cancel Order
 })}
 
 </section>
+</div>
 
 <Footer/>
 

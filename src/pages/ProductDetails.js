@@ -9,148 +9,156 @@ import "./ProductDetails.css";
 
 function ProductDetails(){
 
-  const { id } = useParams();
-  const navigate = useNavigate();
+const { id } = useParams();
+const navigate = useNavigate();
 
-  const [product,setProduct] = useState(null);
-  const [loading,setLoading] = useState(true);
-  const [error,setError] = useState("");
-  const [quantity,setQuantity] = useState(1);
+const [product,setProduct] = useState(null);
+const [loading,setLoading] = useState(true);
+const [error,setError] = useState("");
+const [quantity,setQuantity] = useState(1);
+const [added,setAdded] = useState(false);
 
-  useEffect(()=>{
+useEffect(()=>{
 
-    const fetchProduct = async()=>{
+const fetchProduct = async()=>{
 
-      try{
+try{
 
-        const res = await axios.get(
-          `http://localhost:5000/api/products/${id}`
-        );
+const res = await axios.get(
+`http://localhost:5000/api/products/${id}`
+);
 
-        setProduct(res.data);
+setProduct(res.data);
 
-      }catch(err){
+}catch(err){
 
-        setError("Failed to load product");
+setError("Failed to load product");
 
-      }finally{
-        setLoading(false);
-      }
+}finally{
+setLoading(false);
+}
 
-    };
+};
 
-    fetchProduct();
+fetchProduct();
 
-  },[id]);
+},[id]);
 
-  const formatINR = value =>
-    value.toLocaleString("en-IN",{style:"currency",currency:"INR"});
+const formatINR = value =>
+value.toLocaleString("en-IN",{style:"currency",currency:"INR"});
 
-  const finalPrice = product
-    ? product.price - (product.price * product.discount)/100
-    : 0;
+const finalPrice = product
+? product.price - (product.price * product.discount)/100
+: 0;
 
-  const addToCart = async()=>{
+/* ADD TO CART */
 
-    const userId = localStorage.getItem("userId");
+const addToCart = async()=>{
 
-    if(!userId){
-      alert("Please login first");
-      navigate("/login");
-      return;
-    }
+const userId = localStorage.getItem("userId");
 
-    try{
+if(!userId){
+alert("Please login first");
+navigate("/login");
+return;
+}
 
-      await axios.post(
-        "http://localhost:5000/api/cart/add",
-        {
-          userId,
-          productId:id,
-          quantity
-        }
-      );
+try{
 
-      alert("Added to cart");
+await axios.post(
+"http://localhost:5000/api/cart/add",
+{
+userId,
+productId:id,
+quantity
+}
+);
 
-    }catch(error){
-      console.error(error);
-    }
+setAdded(true);
 
-  };
+}catch(error){
+console.error(error);
+}
 
-  if(loading) return <p className="loading">Loading product...</p>;
-  if(error) return <p className="error">{error}</p>;
+};
 
-  return(
+if(loading) return <p className="loading">Loading product...</p>;
+if(error) return <p className="error">{error}</p>;
 
-  <>
-  
-  <Header/>
+return(
 
-  <section className="product-container">
+<>
 
-    <div className="product-image">
-      <img src={product.image} alt={product.name}/>
-    </div>
+<Header/>
 
-    <div className="product-info">
+<div className="product-page">
 
-      <h1>{product.name}</h1>
+<section className="product-container">
 
-      {product.discount > 0 && (
-        <p className="discount-badge">
-          {product.discount}% OFF
-        </p>
-      )}
+<div className="product-image">
+<img src={product.image} alt={product.name}/>
+</div>
 
-      <div className="price-box">
+<div className="product-info">
 
-        {product.discount > 0 && (
-          <span className="old-price">
-            {formatINR(product.price)}
-          </span>
-        )}
+<h1>{product.name}</h1>
 
-        <span className="price">
-          {formatINR(finalPrice)}
-        </span>
+{product.discount > 0 && (
+<p className="discount-badge">
+{product.discount}% OFF
+</p>
+)}
 
-      </div>
+<div className="price-box">
 
-      <p className="description">
-        {product.description}
-      </p>
+{product.discount > 0 && (
+<span className="old-price">
+{formatINR(product.price)}
+</span>
+)}
 
-      <div className="quantity">
+<span className="price">
+{formatINR(finalPrice)}
+</span>
 
-        <label>Quantity</label>
+</div>
 
-        <input
-          type="number"
-          value={quantity}
-          min="1"
-          onChange={(e)=>setQuantity(e.target.value)}
-        />
+<p className="description">
+{product.description}
+</p>
 
-      </div>
+<div className="quantity">
 
-      <button
-        className="add-cart-btn"
-        onClick={addToCart}
-      >
-        Add to Cart
-      </button>
+<label>Quantity</label>
 
-    </div>
+<input
+type="number"
+value={quantity}
+min="1"
+onChange={(e)=>setQuantity(e.target.value)}
+/>
 
-  </section>
+</div>
 
-  <Footer/>
+<button
+className={`add-cart-btn ${added ? "added" : ""}`}
+onClick={addToCart}
+disabled={added}
+>
+{added ? "✓ Added" : "Add to Cart"}
+</button>
 
-  </>
+</div>
 
-  );
+</section>
+
+</div>
+
+<Footer/>
+
+</>
+
+);
 
 }
 

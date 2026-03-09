@@ -1,16 +1,89 @@
-.toast {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background: #333;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 10px;
-  animation: fadeIn 0.4s;
-  z-index: 999;
+/* =========================
+TOAST CONTAINER
+========================= */
+
+.toast{
+
+position:fixed;
+
+top:20px;
+
+right:20px;
+
+background:linear-gradient(135deg,#4a6cf7,#7b91ff);
+
+color:white;
+
+padding:14px 20px;
+
+border-radius:10px;
+
+font-size:14px;
+
+font-weight:500;
+
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
+
+z-index:9999;
+
+animation:toastSlide 0.5s ease, toastFade 3s ease forwards;
+
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+
+/* =========================
+SLIDE IN ANIMATION
+========================= */
+
+@keyframes toastSlide{
+
+from{
+transform:translateX(120%);
+opacity:0;
+}
+
+to{
+transform:translateX(0);
+opacity:1;
+}
+
+}
+
+
+/* =========================
+AUTO FADE OUT
+========================= */
+
+@keyframes toastFade{
+
+0%{opacity:1;}
+
+80%{opacity:1;}
+
+100%{
+opacity:0;
+transform:translateY(-10px);
+}
+
+}
+
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:480px){
+
+.toast{
+
+right:10px;
+
+left:10px;
+
+top:15px;
+
+text-align:center;
+
+}
+
 }

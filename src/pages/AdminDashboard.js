@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
 import "./AdminDashboard.css";
+
 function AdminDashboard() {
 
   const navigate = useNavigate();
@@ -15,84 +19,127 @@ function AdminDashboard() {
 
     if (!token) {
       navigate("/admin/login");
+      return;
     }
 
     fetchProducts();
 
   }, [navigate]);
 
+
   const fetchProducts = async () => {
 
-    const res = await axios.get("http://localhost:5000/api/products");
+    try {
 
-    setProducts(res.data);
+      const res = await axios.get("http://localhost:5000/api/products");
+
+      setProducts(res.data);
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
 
   };
+
 
   const deleteProduct = async (id) => {
 
-    await axios.delete(`http://localhost:5000/api/products/${id}`);
+    try {
 
-    fetchProducts();
+      await axios.delete(`http://localhost:5000/api/products/${id}`);
+
+      fetchProducts();
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
 
   };
 
+
   return (
 
-    <div >
-       
-      <h2>Admin Dashboard</h2>
+    <>
+      <Header/>
 
-      <button onClick={() => navigate("/admin/add-product")}>
-        Add Product
-      </button>
+      <section className="admin-dashboard">
 
-      <table >
+        <div className="dashboard-container">
 
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Action</th>
-          </tr>
-        </thead>
+          <h2>Admin Dashboard</h2>
 
-        <tbody>
+          <button
+            className="add-product-btn"
+            onClick={() => navigate("/admin/add-product")}
+          >
+            Add Product
+          </button>
 
-          {products.map(product => (
+          <div className="table-container">
 
-            <tr key={product._id}>
+            <table className="product-table">
 
-              <td>{product.name}</td>
-              <td>₹{product.price}</td>
-              <td>{product.category}</td>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Category</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
 
-              <td>
+              <tbody>
 
-                <button
-  onClick={() => navigate(`/admin/edit-product/${product._id}`)}
->
-Edit
-</button>
+                {products.map(product => (
 
-<button
-  onClick={() => deleteProduct(product._id)}
->
-Delete
-</button>
-              </td>
+                  <tr key={product._id}>
 
-            </tr>
+                    <td>{product.name}</td>
 
-          ))}
+                    <td>₹{product.price}</td>
 
-        </tbody>
+                    <td>{product.category}</td>
 
-      </table>
+                    <td>
 
-    </div>
+                      <button
+                        className="edit-btn"
+                        onClick={() =>
+                          navigate(`/admin/edit-product/${product._id}`)
+                        }
+                      >
+                        Edit
+                      </button>
 
+                      <button
+                        className="delete-btn"
+                        onClick={() => deleteProduct(product._id)}
+                      >
+                        Delete
+                      </button>
+
+                    </td>
+
+                  </tr>
+
+                ))}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <Footer/>
+    </>
   );
 }
 

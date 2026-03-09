@@ -4,95 +4,127 @@ const axios = require("axios");
 const mongoose = require("mongoose");
 const Product = require("./models/Product");
 
-
 /* CONNECT DATABASE */
 
 mongoose.connect(process.env.MONGO_URI);
 
-mongoose.connection.once("open",()=>{
-console.log("MongoDB connected");
+mongoose.connection.once("open", () => {
+  console.log("MongoDB connected");
 });
-
 
 /* CATEGORY MAPPING */
 
-const mapCategory = (category)=>{
+const mapCategory = (category) => {
 
-if(category.includes("beauty")) return "beauty";
+const cat = category.toLowerCase();
 
-if(category.includes("fragrance")) return "beauty";
+/* ELECTRONICS */
 
-if(category.includes("furniture")) return "home";
+if(
+cat.includes("smartphone") ||
+cat.includes("laptop") ||
+cat.includes("tablet")
+){
+return "Electronics";
+}
 
-if(category.includes("groceries")) return "groceries";
+/* BEAUTY */
 
-if(category.includes("laptop")) return "electronics";
+if(
+cat.includes("skincare") ||
+cat.includes("fragrance") ||
+cat.includes("beauty")
+){
+return "Beauty";
+}
 
-if(category.includes("smartphone")) return "electronics";
+/* HOME & LIVING */
 
-return "fashion";
+if(
+cat.includes("furniture") ||
+cat.includes("home-decoration") ||
+cat.includes("lighting") ||
+cat.includes("kitchen")
+){
+return "Home & Living";
+}
+
+/* GROCERIES */
+
+if(cat.includes("groceries")){
+return "Groceries";
+}
+
+/* DEFAULT */
+
+return "Fashion";
 
 };
 
+/* GENERATE RANDOM DEAL DATE */
+
+const getDealDate = () => {
+  const future = new Date();
+  future.setDate(future.getDate() + Math.floor(Math.random() * 20));
+  return future;
+};
 
 /* SEED PRODUCTS */
 
-const seedProducts = async()=>{
+const seedProducts = async () => {
 
-try{
+  try {
 
-console.log("Fetching products...");
+    console.log("Fetching products...");
 
-const res = await axios.get(
-"https://dummyjson.com/products?limit=100"
-);
+    const res = await axios.get(
+      "https://dummyjson.com/products?limit=100"
+    );
 
-const apiProducts = res.data.products;
+    const apiProducts = res.data.products;
 
+    /* CLEAR OLD PRODUCTS */
 
-/* CLEAR OLD PRODUCTS */
+    await Product.deleteMany();
 
-await Product.deleteMany();
+    /* TRANSFORM PRODUCTS */
 
+    const products = apiProducts.map(p => ({
 
-/* TRANSFORM PRODUCTS */
+      name: p.title,
 
-const products = apiProducts.map(p=>({
+      price: p.price,
 
-name:p.title,
+      description: p.description,
 
-price:p.price,
+      image: p.thumbnail,
 
-description:p.description,
+      category: mapCategory(p.category),
 
-image:p.thumbnail,
+      stock: p.stock || 50,
 
-category:mapCategory(p.category),
+      discount: Math.round(p.discountPercentage || 0),
 
-stock:p.stock,
+      dealExpiry: p.discountPercentage ? getDealDate() : null
 
-discount:Math.round(p.discountPercentage)
+    }));
 
-}));
+    /* INSERT PRODUCTS */
 
+    await Product.insertMany(products);
 
-/* INSERT PRODUCTS */
+    console.log("Products imported successfully");
 
-await Product.insertMany(products);
+    process.exit();
 
-console.log("Products imported successfully");
+  } catch (error) {
 
-process.exit();
+    console.error("Error importing products:", error);
 
-}catch(error){
+    process.exit();
 
-console.error("Error importing products:",error);
-
-process.exit();
-
-}
+  }
 
 };
-
 
 seedProducts();

@@ -20,79 +20,120 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import EditProduct from "./pages/EditProduct";
 
-import { CartProvider } from "./context/CartContext";
+import { CartProvider, useCart } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
 import { OrderProvider } from "./context/OrderContext";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import Toast from "./components/Toast";
+
+
+function AppContent() {
+
+  const { toast } = useCart();
+
+  return (
+    <>
+      {/* Toast Notification */}
+      <Toast message={toast} />
+
+      <Routes>
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/categories" element={<Categories />} />
+
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/shop/:category" element={<Shop />} />
+
+        <Route path="/product/:id" element={<ProductDetails />} />
+
+        <Route path="/deals" element={<Deals />} />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/order-success"
+          element={
+            <ProtectedRoute>
+              <OrderSuccess />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ORDERS */}
+
+        <Route path="/orders" element={<Orders />} />
+
+        <Route path="/order/:id" element={<OrderDetails />} />
+
+        <Route
+          path="/order-history"
+          element={
+            <ProtectedRoute>
+              <OrderHistory />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ADMIN */}
+
+        <Route path="/admin/login" element={<AdminLogin />} />
+
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+        <Route path="/admin/add-product" element={<AddProduct />} />
+
+        <Route path="/admin/edit-product/:id" element={<EditProduct />} />
+
+      </Routes>
+    </>
+  );
+}
+
 
 function App() {
+
   return (
-<AuthProvider>
-<CartProvider>
-<OrderProvider>
+    <AuthProvider>
+      <CartProvider>
+        <OrderProvider>
 
-<BrowserRouter>
+          <BrowserRouter>
+            <AppContent />
+          </BrowserRouter>
 
-<Routes>
-
-<Route path="/" element={<Home />} />
-
-<Route path="/categories" element={<Categories />} />
-
-<Route path="/shop" element={<Shop />} />
-<Route path="/shop/:category" element={<Shop />} />
-
-<Route path="/product/:id" element={<ProductDetails />} />
-
-<Route path="/deals" element={<Deals />} />
-
-<Route path="/login" element={<Login />} />
-<Route path="/register" element={<Register />} />
-
-<Route path="/profile" element={
-<ProtectedRoute><Profile /></ProtectedRoute>
-} />
-
-<Route path="/cart" element={
-<ProtectedRoute><Cart /></ProtectedRoute>
-} />
-
-<Route path="/checkout" element={
-<ProtectedRoute><Checkout /></ProtectedRoute>
-} />
-
-<Route path="/order-success" element={
-<ProtectedRoute><OrderSuccess /></ProtectedRoute>
-} />
-
-{/* ORDERS SYSTEM */}
-
-<Route path="/orders" element={<Orders />} />
-
-<Route path="/order/:id" element={<OrderDetails />} />
-
-<Route path="/order-history" element={
-<ProtectedRoute><OrderHistory /></ProtectedRoute>
-} />
-
-{/* ADMIN */}
-
-<Route path="/admin/login" element={<AdminLogin />} />
-
-<Route path="/admin/dashboard" element={<AdminDashboard />} />
-
-<Route path="/admin/add-product" element={<AddProduct />} />
-
-<Route path="/admin/edit-product/:id" element={<EditProduct />} />
-
-</Routes>
-
-</BrowserRouter>
-
-</OrderProvider>
-</CartProvider>
-</AuthProvider>
+        </OrderProvider>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 

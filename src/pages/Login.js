@@ -1,102 +1,75 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from "../context/AuthContext"; // Integrated
+import { useAuth } from "../context/AuthContext";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "./Auth.css";
 
-function Login(){
-
+function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth(); // Hook into the login function
-
-  const [email,setEmail] = useState("");
-  const [password,setPassword] = useState("");
+  const { login } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
-
     try {
+      const res = await axios.post("http://localhost:5000/api/users/login", {
+        email,
+        password,
+      });
 
-      const res = await axios.post(
-        "http://localhost:5000/api/users/login",
-        { email, password }
-      );
-
-      console.log("LOGIN RESPONSE:", res.data);
-
-      /* UPDATE GLOBAL STATE */
+      // Update context - This makes Profile/Cart appear in Header
       login(res.data.user);
-
-      /* SAVE USER ID FOR API CALLS */
-      const userId = res.data.user._id;
-
-      localStorage.setItem("userId", userId);
-
-      console.log("Saved userId:", userId);
+      
+      // Store userId for other backend queries
+      localStorage.setItem("userId", res.data.user._id);
 
       alert("Login successful");
-
-      navigate("/");
-
+      navigate("/"); 
     } catch (error) {
-
-      console.error(error);
-
-      alert(
-        error.response?.data?.message ||
-        "Login failed"
-      );
-
+      alert(error.response?.data?.message || "Login failed");
     }
-
   };
 
-  return(
-
-    <div className="auth-container">
-
-      <div className="auth-left">
-        <img
-          src="https://images.unsplash.com/photo-1601597111158-2fceff292cdc"
-          alt=""
-        />
+  return (
+    <>
+      <Header />
+      <div className="auth-container">
+        <div className="auth-left">
+          <img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a" alt="Ecommerce" />
+        </div>
+        <div className="auth-right">
+          <div className="auth-card">
+            <h2>Login</h2>
+            <p>Access your account</p>
+            <form onSubmit={handleSubmit}>
+              <input 
+                type="email" 
+                placeholder="Email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required 
+              />
+              <input 
+                type="password" 
+                placeholder="Password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+              />
+              <button type="submit">Login</button>
+            </form>
+            <div className="auth-switch">
+              Don't have an account? <Link to="/register"> Register</Link>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div className="auth-right">
-
-        <h2>Login</h2>
-
-        <form onSubmit={handleSubmit}>
-
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e)=>setEmail(e.target.value)}
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e)=>setPassword(e.target.value)}
-            required
-          />
-
-          <button type="submit">Login</button>
-
-        </form>
-
-        <Link to="/register">Create Account</Link>
-
-      </div>
-
-    </div>
-
+      <Footer />
+    </>
   );
-
 }
 
 export default Login;

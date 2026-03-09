@@ -1,70 +1,71 @@
 /* =========================
-   GLOBAL RESET
+FOOTER
 ========================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+
+.footer{
+background:linear-gradient(135deg,#ecec1d,#7b91ff);
+
+color:white;
+
+text-align:center;
+
+padding:25px 20px;
+
+margin-top:40px;
+
+box-shadow:0 -4px 12px rgba(0,0,0,0.1);
+
 }
+
+
+/* LINKS */
+
+.footer p{
+
+margin:6px 0;
+
+font-size:14px;
+
+letter-spacing:.5px;
+
+}
+
+
+/* HOVER EFFECT FOR LINKS */
+
+.footer p:first-child{
+
+cursor:pointer;
+
+}
+
+.footer p:first-child span{
+
+margin:0 10px;
+
+transition:.3s;
+
+}
+
+.footer p:first-child span:hover{
+
+color:#ffeaa7;
+
+}
+
 
 /* =========================
-   FOOTER
+MOBILE
 ========================= */
-.footer {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: #fff;
-  text-align: center;
-  padding: 28px 15px;
-  animation: fadeInUp 0.8s ease;
+
+@media(max-width:480px){
+
+.footer{
+
+font-size:13px;
+
+padding:20px 10px;
+
 }
 
-/* =========================
-   FOOTER TEXT
-========================= */
-.footer p {
-  font-size: 14px;
-  margin-bottom: 8px;
-  opacity: 0.9;
-}
-
-.footer p:last-child {
-  margin-bottom: 0;
-  font-size: 13px;
-  opacity: 0.8;
-}
-
-/* =========================
-   HOVER EFFECT
-========================= */
-.footer p:first-child {
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-}
-
-.footer p:first-child:hover {
-  opacity: 1;
-}
-
-/* =========================
-   ANIMATION
-========================= */
-@keyframes fadeInUp {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-@media (max-width: 480px) {
-  .footer p {
-    font-size: 13px;
-  }
 }

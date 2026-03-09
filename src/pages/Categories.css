@@ -1,171 +1,191 @@
 /* =========================
-   GLOBAL RESET
+HERO SECTION
 ========================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+
+.category-hero{
+
+text-align:center;
+
+padding:70px 20px;
+
+background:linear-gradient(-45deg,#667eea,#764ba2,#6a11cb,#2575fc);
+
+background-size:400% 400%;
+
+animation:bgMove 14s ease infinite;
+
+color:white;
+
 }
+
+.category-hero h1{
+
+font-size:36px;
+
+margin-bottom:10px;
+
+}
+
+.category-hero p{
+
+font-size:16px;
+
+opacity:0.9;
+
+}
+
 
 /* =========================
-   CATEGORY HERO
+CATEGORY SECTION
 ========================= */
-.category-hero {
-  padding: 110px 20px 60px;
-  text-align: center;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  color: #333;
-  animation: fadeIn 1s ease-in-out;
+
+.category-section{
+
+max-width:1200px;
+
+margin:auto;
+
+padding:50px 20px;
+
+display:grid;
+
+grid-template-columns:repeat(5,1fr);
+
+gap:30px;
+
 }
 
-.category-hero h1 {
-  font-size: 36px;
-  margin-bottom: 10px;
-  animation: slideDown 0.9s ease;
-}
-
-.category-hero p {
-  font-size: 16px;
-  opacity: 0.85;
-  animation: fadeUp 1s ease;
-}
 
 /* =========================
-   CATEGORY SECTION
+CATEGORY CARD
 ========================= */
-.category-section {
-  max-width: 1200px;
-  margin: 40px auto 60px;
-  padding: 0 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 30px;
-  animation: fadeUp 1.2s ease;
+
+.category-card{
+
+background:white;
+
+border-radius:16px;
+
+overflow:hidden;
+
+cursor:pointer;
+
+text-align:center;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+
+transition:.35s;
+
 }
+
+.category-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 18px 40px rgba(0,0,0,0.25);
+
+}
+
+
+/* IMAGE */
+
+.category-card img{
+
+width:100%;
+
+height:180px;
+
+object-fit:cover;
+
+transition:.4s;
+
+}
+
+.category-card:hover img{
+
+transform:scale(1.08);
+
+}
+
+
+/* TITLE */
+
+.category-card h3{
+
+padding:15px;
+
+font-size:18px;
+
+color:#1f2937;
+
+}
+
 
 /* =========================
-   CATEGORY CARD
+BACKGROUND ANIMATION
 ========================= */
-.category-card {
-  background: #fff;
-  border-radius: 18px;
-  overflow: hidden;
-  cursor: pointer;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  transition: transform 0.45s ease, box-shadow 0.45s ease;
-  position: relative;
+
+@keyframes bgMove{
+
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+
 }
 
-.category-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255, 255, 255, 0.45),
-    transparent
-  );
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
-  z-index: 1;
-}
-
-.category-card:hover::before {
-  transform: translateX(100%);
-}
-
-.category-card:hover {
-  transform: translateY(-12px) scale(1.03);
-  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.25);
-}
 
 /* =========================
-   CATEGORY IMAGE
+TABLET
 ========================= */
-.category-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  transition: transform 0.6s ease;
+
+@media(max-width:1024px){
+
+.category-section{
+
+grid-template-columns:repeat(3,1fr);
+
 }
 
-.category-card:hover img {
-  transform: scale(1.1);
 }
+
 
 /* =========================
-   CATEGORY TITLE
+SMALL TABLET
 ========================= */
-.category-card h3 {
-  padding: 18px;
-  text-align: center;
-  font-size: 18px;
-  color: #333;
-  background: #fff;
-  position: relative;
-  z-index: 2;
+
+@media(max-width:768px){
+
+.category-section{
+
+grid-template-columns:repeat(2,1fr);
+
 }
+
+}
+
 
 /* =========================
-   ANIMATIONS
+MOBILE
 ========================= */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+
+@media(max-width:480px){
+
+.category-section{
+
+grid-template-columns:1fr;
+
 }
 
-@keyframes slideDown {
-  from {
-    transform: translateY(-40px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.category-hero h1{
+
+font-size:28px;
+
 }
 
-@keyframes fadeUp {
-  from {
-    transform: translateY(40px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.category-card img{
+
+height:160px;
+
 }
 
-/* =========================
-   RESPONSIVE DESIGN
-========================= */
-@media (max-width: 768px) {
-  .category-hero h1 {
-    font-size: 28px;
-  }
-
-  .category-card img {
-    height: 180px;
-  }
-}
-
-@media (max-width: 480px) {
-  .category-hero {
-    padding: 100px 15px 50px;
-  }
-
-  .category-hero p {
-    font-size: 14px;
-  }
-
-  .category-card h3 {
-    font-size: 16px;
-    padding: 14px;
-  }
 }

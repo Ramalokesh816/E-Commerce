@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
 import "./EditProduct.css";
 
 function EditProduct() {
@@ -21,16 +25,24 @@ function EditProduct() {
 
     const fetchProduct = async () => {
 
-      const res = await axios.get(
-        `http://localhost:5000/api/products/${id}`
-      );
+      try{
 
-      setProduct(res.data);
+        const res = await axios.get(
+          `http://localhost:5000/api/products/${id}`
+        );
+
+        setProduct(res.data);
+
+      }catch(error){
+        console.log(error);
+      }
+
     };
 
     fetchProduct();
 
   }, [id]);
+
 
   const handleChange = (e) => {
 
@@ -41,96 +53,105 @@ function EditProduct() {
 
   };
 
+
   const handleSubmit = async (e) => {
 
     e.preventDefault();
 
-    await axios.put(
-      `http://localhost:5000/api/products/${id}`,
-      product
-    );
+    try{
 
-    alert("Product updated successfully");
+      await axios.put(
+        `http://localhost:5000/api/products/${id}`,
+        product
+      );
 
-    navigate("/admin/dashboard");
+      alert("Product updated successfully");
+
+      navigate("/admin/dashboard");
+
+    }catch(error){
+
+      console.log(error);
+
+    }
+
   };
+
 
   return (
 
-    <div style={{padding:"40px"}}>
+    <>
+      <Header/>
 
-      <h2>Edit Product</h2>
+      <section className="edit-page">
 
-      <form onSubmit={handleSubmit}>
+        <div className="edit-container">
 
-        <input
-          type="text"
-          name="name"
-          value={product.name}
-          onChange={handleChange}
-          placeholder="Product Name"
-        />
+          <h2>Edit Product</h2>
 
-        <br/><br/>
+          <form onSubmit={handleSubmit}>
 
-        <input
-          type="number"
-          name="price"
-          value={product.price}
-          onChange={handleChange}
-          placeholder="Price"
-        />
+            <input
+              type="text"
+              name="name"
+              value={product.name}
+              onChange={handleChange}
+              placeholder="Product Name"
+            />
 
-        <br/><br/>
+            <input
+              type="number"
+              name="price"
+              value={product.price}
+              onChange={handleChange}
+              placeholder="Price"
+            />
 
-        <input
-          type="text"
-          name="category"
-          value={product.category}
-          onChange={handleChange}
-          placeholder="Category"
-        />
+            <input
+              type="text"
+              name="category"
+              value={product.category}
+              onChange={handleChange}
+              placeholder="Category"
+            />
 
-        <br/><br/>
+            <input
+              type="text"
+              name="image"
+              value={product.image}
+              onChange={handleChange}
+              placeholder="Image URL"
+            />
 
-        <input
-          type="text"
-          name="image"
-          value={product.image}
-          onChange={handleChange}
-          placeholder="Image URL"
-        />
+            <textarea
+              name="description"
+              value={product.description}
+              onChange={handleChange}
+              placeholder="Description"
+            />
 
-        <br/><br/>
+            <input
+              type="number"
+              name="stock"
+              value={product.stock}
+              onChange={handleChange}
+              placeholder="Stock"
+            />
 
-        <textarea
-          name="description"
-          value={product.description}
-          onChange={handleChange}
-          placeholder="Description"
-        />
+            <button type="submit" className="update-btn">
+              Update Product
+            </button>
 
-        <br/><br/>
+          </form>
 
-        <input
-          type="number"
-          name="stock"
-          value={product.stock}
-          onChange={handleChange}
-          placeholder="Stock"
-        />
+        </div>
 
-        <br/><br/>
+      </section>
 
-        <button type="submit">
-          Update Product
-        </button>
-
-      </form>
-
-    </div>
-
+      <Footer/>
+    </>
   );
+
 }
 
 export default EditProduct;

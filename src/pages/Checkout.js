@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
+import "./Checkout.css";
 function Checkout() {
 
   const navigate = useNavigate();
@@ -105,7 +105,8 @@ function Checkout() {
     <>
       <Header />
 
-      <div style={{ maxWidth: "600px", margin: "40px auto" }}>
+      <section className="checkout-page">
+  <div className="checkout-container">
 
         <h2>Checkout</h2>
 
@@ -161,14 +162,14 @@ function Checkout() {
 
           <br /><br />
 
-          <button type="submit">
-            Confirm Order
-          </button>
+          <button type="submit" className="checkout-btn">
+  Confirm Order
+</button>
 
         </form>
 
       </div>
-
+      </section>
       <Footer />
     </>
   );
