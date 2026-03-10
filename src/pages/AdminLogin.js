@@ -31,7 +31,7 @@ function AdminLogin() {
 
     } catch (error) {
 
-      alert("Invalid Login");
+      alert(error.response?.data?.message || "Login Failed");
 
     }
 

@@ -48,19 +48,23 @@ function AddProduct() {
     try {
 
       await axios.post(
-        "https://e-commerce-1-ifvn.onrender.com",
+        "https://e-commerce-1-ifvn.onrender.com/api/products",
         product
       );
 
       alert("Product Added Successfully!");
+
       navigate("/admin/dashboard");
+
       setProduct({
         name: "",
         price: "",
         category: "",
         image: "",
         description: "",
-        stock: ""
+        stock: "",
+        discount: "",
+        dealExpiry: ""
       });
 
     } catch (error) {
@@ -76,95 +80,102 @@ function AddProduct() {
       <Header />
 
       <div className="add-product-wrapper">
-  <div className="add-product-card">
-        <h2>Add Product</h2>
 
-        <form onSubmit={handleSubmit}>
+        <div className="add-product-card">
 
-          <input
-            type="text"
-            name="name"
-            placeholder="Product Name"
-            value={product.name}
-            onChange={handleChange}
-            required
-          />
+          <h2>Add Product</h2>
 
-          <br /><br />
+          <form onSubmit={handleSubmit}>
 
-          <input
-            type="number"
-            name="price"
-            placeholder="Price"
-            value={product.price}
-            onChange={handleChange}
-            required
-          />
+            <input
+              type="text"
+              name="name"
+              placeholder="Product Name"
+              value={product.name}
+              onChange={handleChange}
+              required
+            />
 
-          <br /><br />
+            <br /><br />
 
-          <input
-            type="text"
-            name="category"
-            placeholder="Category"
-            value={product.category}
-            onChange={handleChange}
-          />
+            <input
+              type="number"
+              name="price"
+              placeholder="Price"
+              value={product.price}
+              onChange={handleChange}
+              required
+            />
 
-          <br /><br />
+            <br /><br />
 
-          <input
-            type="text"
-            name="image"
-            placeholder="Image URL"
-            value={product.image}
-            onChange={handleChange}
-            required
-          />
+            <input
+              type="text"
+              name="category"
+              placeholder="Category"
+              value={product.category}
+              onChange={handleChange}
+            />
 
-          <br /><br />
+            <br /><br />
 
-          <textarea
-            name="description"
-            placeholder="Product Description"
-            value={product.description}
-            onChange={handleChange}
-          />
-          <br /> <br />
-          <input
-  type="number"
-  name="discount"
-  placeholder="Discount (%)"
-  value={product.discount}
-  onChange={handleChange}
-/>
+            <input
+              type="text"
+              name="image"
+              placeholder="Image URL"
+              value={product.image}
+              onChange={handleChange}
+              required
+            />
 
-          <br /><br />
+            <br /><br />
 
-          <input
-            type="number"
-            name="stock"
-            placeholder="Stock"
-            value={product.stock}
-            onChange={handleChange}
-          />
+            <textarea
+              name="description"
+              placeholder="Product Description"
+              value={product.description}
+              onChange={handleChange}
+            />
 
-          <br /><br />
-          <input
-  type="datetime-local"
-  name="dealExpiry"
-  value={product.dealExpiry}
-  onChange={handleChange}
-/>
-<br /><br />
+            <br /><br />
 
+            <input
+              type="number"
+              name="discount"
+              placeholder="Discount (%)"
+              value={product.discount}
+              onChange={handleChange}
+            />
 
-          <button type="submit">Add Product</button>
+            <br /><br />
 
-        </form>
+            <input
+              type="number"
+              name="stock"
+              placeholder="Stock"
+              value={product.stock}
+              onChange={handleChange}
+            />
+
+            <br /><br />
+
+            <input
+              type="datetime-local"
+              name="dealExpiry"
+              value={product.dealExpiry}
+              onChange={handleChange}
+            />
+
+            <br /><br />
+
+            <button type="submit">Add Product</button>
+
+          </form>
+
+        </div>
 
       </div>
-    </div>
+
       <Footer />
     </>
   );

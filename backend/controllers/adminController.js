@@ -1,11 +1,13 @@
 const Admin = require("../models/Admin");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 const registerAdmin = async (req, res) => {
   try {
+
     const { email, password } = req.body;
 
-    const existingAdmin = await Admin.findOne({ email });
+    const existingAdmin = await Admin.findOne({ email: email.trim() });
 
     if (existingAdmin) {
       return res.status(400).json({ message: "Admin already exists" });
@@ -14,7 +16,7 @@ const registerAdmin = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const admin = new Admin({
-      email,
+      email: email.trim(),
       password: hashedPassword
     });
 
@@ -26,11 +28,12 @@ const registerAdmin = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 const loginAdmin = async (req, res) => {
 
   const { email, password } = req.body;
 
-  const admin = await Admin.findOne({ email });
+  const admin = await Admin.findOne({ email: email.trim() });
 
   if (!admin) {
     return res.status(400).json({ message: "Admin not found" });

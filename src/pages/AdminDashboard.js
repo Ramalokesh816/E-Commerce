@@ -31,13 +31,15 @@ function AdminDashboard() {
 
     try {
 
-      const res = await axios.get("https://e-commerce-1-ifvn.onrender.com");
+      const res = await axios.get(
+        "https://e-commerce-1-ifvn.onrender.com/api/products"
+      );
 
       setProducts(res.data);
 
     } catch (error) {
 
-      console.error(error);
+      console.error("Error fetching products:", error);
 
     }
 
@@ -48,13 +50,15 @@ function AdminDashboard() {
 
     try {
 
-      await axios.delete(`https://e-commerce-1-ifvn.onrender.com/api/products/${id}`);
+      await axios.delete(
+        `https://e-commerce-1-ifvn.onrender.com/api/products/${id}`
+      );
 
       fetchProducts();
 
     } catch (error) {
 
-      console.error(error);
+      console.error("Error deleting product:", error);
 
     }
 
