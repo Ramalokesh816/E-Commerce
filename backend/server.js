@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const path = require("path"); // Required for serving the frontend
 
 const connectDB = require("./config/db");
 
@@ -20,16 +21,14 @@ const app = express();
 
 /* MIDDLEWARE */
 
-/* Allow frontend to access backend */
 app.use(cors({
   origin: [
     "https://e-commerce-2-y2k1.onrender.com"
   ],
-  methods: ["GET","POST","PUT","DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
-/* FIX PAYLOAD TOO LARGE ERROR */
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
@@ -42,10 +41,19 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/address", addressRoutes);
 app.use("/api/orders", orderRoutes);
 
-/* TEST ROUTE */
+/* SERVE FRONTEND */
 
-app.get("/", (req, res) => {
-  res.send("Backend API Running");
+// We go up one level from 'backend' to the root, 
+// then into the 'build' folder (where npm run build puts your React app)
+const buildPath = path.join(__dirname, "../build");
+
+app.use(express.static(buildPath));
+
+// The "Catch-all" handler: 
+// This sends back the index.html file for any request that isn't an API route.
+// This allows React Router to handle the URL, fixing the 404 error.
+app.get("*", (req, res) => {
+  res.sendFile(path.join(buildPath, "index.html"));
 });
 
 /* SERVER PORT */
